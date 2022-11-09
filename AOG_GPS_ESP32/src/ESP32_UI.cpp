@@ -18,16 +18,16 @@ void setResetButtonToRed() {
 void initESPUI ( void ) {
 
   labelLoad = ESPUI.addControl( ControlType::Label, "Load:", "", ControlColor::Turquoise );
-  labelHeading = ESPUI.addControl( ControlType::Label, "Heading values:", "", ControlColor::Emerald );
+  labelHeading = ESPUI.addControl( ControlType::Label, "Heading values:", "", ControlColor::Sunflower );
 
-  buttonReset = ESPUI.addControl( ControlType::Button, "Store the Settings", "Apply", ControlColor::Emerald, Control::noParent,
+  buttonReset = ESPUI.addControl( ControlType::Button, "Store the Settings", "Apply", ControlColor::Sunflower, Control::noParent,
   []( Control * control, int id ) {
     if( id == B_UP ) {
       saveConfig();
     }
   } );
 
-  buttonReset = ESPUI.addControl( ControlType::Button, "If this turns red, you have to", "Apply & Reboot", ControlColor::Emerald, Control::noParent,
+  buttonReset = ESPUI.addControl( ControlType::Button, "If this turns red, you have to", "Apply & Reboot", ControlColor::Sunflower, Control::noParent,
   []( Control * control, int id ) {
     if( id == B_UP ) {
       saveConfig();
