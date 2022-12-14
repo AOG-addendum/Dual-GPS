@@ -61,6 +61,8 @@ extern double VarProcessSlow;
 extern double VarProcessVerySlow;
 extern bool filterGPSpos;
 
+extern uint16_t nmeaMessageDelay;
+
 extern double HeadingQuotaVTG;
 
 extern double virtLat, virtLon;
@@ -299,3 +301,4 @@ extern void buildVTG();
 extern void buildHDT();
 extern void buildOGI();
 extern void getUBX();
+extern void NmeaOut();

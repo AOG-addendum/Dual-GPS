@@ -678,46 +678,47 @@ void headingAndPosition ( void* z ){
 			
 					filterPosition();//runs always to fill kalman variables
 
-			if( gpsConfig.sendGGA ){ buildGGA(); }
-			if( gpsConfig.sendVTG ){ buildVTG(); }
-			if( gpsConfig.sendHDT ){ buildHDT(); }
-			buildOGI();//should be build anyway, to decide if new data came in 
+			buildGGA();
+			buildVTG();
+			buildHDT();
+			buildOGI();
 
-		if(( newOGI ) && ( gpsConfig.sendOGI == 1 )){
-			udpRoof.writeTo( OGIBuffer, OGIdigit, ipDestination, gpsConfig.aogPortSendTo );
-			if( gpsConfig.debugmodeRAW ){
-				Serial.print( "millis," ); Serial.print( millis()); Serial.print( "," );
-				Serial.print( "UBXRingCount1 OGIfromUBX PAOGI," );
-				Serial.print( UBXRingCount1 ); Serial.print( "," );
-				Serial.print( OGIfromUBX ); Serial.print( "," );
-				Serial.print( "DualGPSPres RollPres VirtAntPres DrivDir FilterPos," );
-				Serial.print( dualGPSHeadingPresent ); Serial.print( "," );
-				Serial.print( rollPresent ); Serial.print( "," );
-				Serial.print( virtAntPosPresent ); Serial.print( "," );
-				Serial.print( drivDirect ); Serial.print( "," );
-				Serial.print( filterGPSpos ); Serial.print( "," );
-				Serial.print( "PVThead RelPosNEDhead," );
-				Serial.print( UBXPVT1[UBXRingCount1].headMot ); Serial.print( "," );
-				Serial.print( UBXRelPosNED[UBXRingCount2].relPosHeading ); Serial.print( "," );
-				Serial.print( "PVTlat PVTlon," );
-				Serial.print( UBXPVT1[UBXRingCount1].lat ); Serial.print( "," );
-				Serial.print( UBXPVT1[UBXRingCount1].lon ); Serial.print( "," );
-				for ( byte N = 0; N < OGIdigit; N++ ){Serial.write( OGIBuffer[N]);}
+			if( gpsConfig.sendOGI == 1 ){
+				udpRoof.writeTo( OGIBuffer, OGIdigit, ipDestination, gpsConfig.aogPortSendTo );
+				if( gpsConfig.debugmodeRAW ){
+					Serial.print( "millis," ); Serial.print( millis()); Serial.print( "," );
+					Serial.print( "UBXRingCount1 OGIfromUBX PAOGI," );
+					Serial.print( UBXRingCount1 ); Serial.print( "," );
+					Serial.print( OGIfromUBX ); Serial.print( "," );
+					Serial.print( "DualGPSPres RollPres VirtAntPres DrivDir FilterPos," );
+					Serial.print( dualGPSHeadingPresent ); Serial.print( "," );
+					Serial.print( rollPresent ); Serial.print( "," );
+					Serial.print( virtAntPosPresent ); Serial.print( "," );
+					Serial.print( drivDirect ); Serial.print( "," );
+					Serial.print( filterGPSpos ); Serial.print( "," );
+					Serial.print( "PVThead RelPosNEDhead," );
+					Serial.print( UBXPVT1[UBXRingCount1].headMot ); Serial.print( "," );
+					Serial.print( UBXRelPosNED[UBXRingCount2].relPosHeading ); Serial.print( "," );
+					Serial.print( "PVTlat PVTlon," );
+					Serial.print( UBXPVT1[UBXRingCount1].lat ); Serial.print( "," );
+					Serial.print( UBXPVT1[UBXRingCount1].lon ); Serial.print( "," );
+					for ( byte N = 0; N < OGIdigit; N++ ){Serial.write( OGIBuffer[N]);}
+				}
+				newOGI = false;
 			}
-			newOGI = false;
-		}
-		if( newGGA ){
-			udpRoof.writeTo( GGABuffer, GGAdigit, ipDestination, gpsConfig.aogPortSendTo );
-			newGGA = false;
-		}
-		if( newVTG ){
-			udpRoof.writeTo( VTGBuffer, VTGdigit, ipDestination, gpsConfig.aogPortSendTo );
-			newVTG = false;
-		}
-		if( newHDT ){
-			udpRoof.writeTo( HDTBuffer, HDTdigit, ipDestination, gpsConfig.aogPortSendTo );
-			newHDT = false;
-		}
+			if( gpsConfig.sendGGA ){
+				udpRoof.writeTo( GGABuffer, GGAdigit, ipDestination, gpsConfig.aogPortSendTo );
+				newGGA = false;
+			}
+			if( gpsConfig.sendVTG ){
+				udpRoof.writeTo( VTGBuffer, VTGdigit, ipDestination, gpsConfig.aogPortSendTo );
+				newVTG = false;
+			}
+			if( gpsConfig.sendHDT ){
+				udpRoof.writeTo( HDTBuffer, HDTdigit, ipDestination, gpsConfig.aogPortSendTo );
+				newHDT = false;
+			}
+			NmeaOut();
 		}
 
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );

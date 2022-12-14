@@ -62,6 +62,8 @@ void setup( void ) {
   Serial.println( "Welcome to ESP32 Dual GPS.\nTo configure, please open the WebUI." );
 
   NmeaTransmitter.begin( gpsConfig.serialNmeaBaudrate, SWSERIAL_8N1, -1, gpsConfig.gpioSerialNmea );
+  NmeaTransmitter.enableIntTx(false);
+  nmeaMessageDelay = 1000 / gpsConfig.serialNmeaMessagesPerSec;
 
   pinMode( gpsConfig.gpioWifiLed, OUTPUT );
 
@@ -113,7 +115,6 @@ void setup( void ) {
   initIdleStats();
 
   initHeadingAndPosition();
-  initNmeaOut();
   initSpeedPWM();
   initHeadingDisplay();
 }
