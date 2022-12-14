@@ -207,7 +207,7 @@ struct GPS_Config {
   uint16_t serialNmeaBaudrate = 38400;
   uint8_t serialNmeaMessagesPerSec = 5;
 
-  uint8_t gpioVelocityPWM = 19;      // Velocity (MPH speed) PWM pin
+  uint8_t gpioVelocityPWM = 15;      // Velocity (MPH speed) PWM pin
   int velocityHzPerMPH = 0; // PWM (MPH * multiplier)
 
   //Antennas position
