@@ -226,7 +226,7 @@ struct GPS_Config {
 
   bool sendOGI = 1;                     //1: send NMEA message 0: off
   bool sendVTG = 0;                     //1: send NMEA message 0: off
-  bool sendGGA = 1;                     //1: send NMEA message 0: off
+  bool sendGGA = 0;                     //1: send NMEA message 0: off
   bool sendHDT = 0;                     //1: send NMEA message 0: off
 
   bool debugmode = false;
