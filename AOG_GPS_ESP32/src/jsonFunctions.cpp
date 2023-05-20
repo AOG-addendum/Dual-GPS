@@ -91,7 +91,7 @@ json parseGpsConfigToJson( const GPS_Config& config ) {
   j["gps"]["MaxHeadingChangePerSecond"] = config.MaxHeadChangPerSec;
   j["gps"]["checkUBXFlags"] = config.checkUBXFlags;
   j["gps"]["filterGPSpositionOnWeakSignal"] = config.filterGPSposOnWeakSignal;
-  j["gps"]["GPSPosCorrectionByRoll"] = config.GPSPosCorrByRoll;
+  j["gps"]["GPSPositionCorrectionByRoll"] = config.GPSPosCorrByRoll;
   j["gps"]["rollAngleCorrection"] = config.rollAngleCorrection;
   
   j["serialNmea"]["sendSerialNmeaVTG"] = config.sendSerialNmeaVTG;
