@@ -424,9 +424,10 @@ void headingRollCalc( ){
 				if( add360ToVTG ){
 					HeadingMix = (( HeadingRelPosNED * ( 1.0 - HeadingQuotaVTG )) + (( HeadingVTG + 360 ) * HeadingQuotaVTG ));
 				}
-				if( add360ToRelPosNED ){
+				else if( add360ToRelPosNED ){
 					HeadingMix = ((( HeadingRelPosNED + 360 ) * ( 1.0 - HeadingQuotaVTG )) + ( HeadingVTG * HeadingQuotaVTG ));
 				}
+				else{ HeadingMix = HeadingRelPosNED; } //when GPS is above steer axle
 			}
 			if( HeadingMix > 360 ){
 				HeadingMix -= 360;
