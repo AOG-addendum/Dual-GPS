@@ -38,6 +38,15 @@ void initESPUI ( void ) {
 
   uint16_t tabConfigurations;
 
+  // Status Tab
+  {
+    uint16_t tab = ESPUI.addControl( ControlType::Tab, "Status", "Status" );
+    String buildDate = String( __DATE__ );
+    buildDate += String( " " );
+    buildDate += String( __TIME__ );
+    ESPUI.addControl( ControlType::Label, "Build date:", buildDate, ControlColor::Turquoise, tab );
+  }
+
   // Network Tab
   {
     uint16_t tab = ESPUI.addControl( ControlType::Tab, "Network", "Network" );
