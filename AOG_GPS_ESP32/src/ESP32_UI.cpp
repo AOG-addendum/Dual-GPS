@@ -18,8 +18,8 @@ void setResetButtonToRed() {
 
 void initESPUI ( void ) {
 
-  labelLoad = ESPUI.addControl( ControlType::Label, "Load:", "", ControlColor::Turquoise );
-  labelHeading = ESPUI.addControl( ControlType::Label, "Heading values:", "", ControlColor::Sunflower );
+  labelLoad = ESPUI.addControl( ControlType::Label, "Load", "", ControlColor::Turquoise );
+  labelHeading = ESPUI.addControl( ControlType::Label, "Heading values", "", ControlColor::Sunflower );
 
   buttonReset = ESPUI.addControl( ControlType::Button, "Store the Settings", "Apply", ControlColor::Sunflower, Control::noParent,
   []( Control * control, int id ) {
@@ -45,7 +45,7 @@ void initESPUI ( void ) {
     String buildDate = String( __DATE__ );
     buildDate += String( " " );
     buildDate += String( __TIME__ );
-    ESPUI.addControl( ControlType::Label, "Build date:", buildDate, ControlColor::Turquoise, tab );
+    ESPUI.addControl( ControlType::Label, "Build date", buildDate, ControlColor::Turquoise, tab );
 
     labelStatus = ESPUI.addControl( ControlType::Label, "GPS receivers", "", ControlColor::Turquoise, tab );
   }
