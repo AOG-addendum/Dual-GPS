@@ -8,6 +8,7 @@
 
 uint16_t labelLoad;
 uint16_t labelHeading;
+uint16_t labelStatus;
 uint16_t buttonReset;
 
 void setResetButtonToRed() {
@@ -45,6 +46,8 @@ void initESPUI ( void ) {
     buildDate += String( " " );
     buildDate += String( __TIME__ );
     ESPUI.addControl( ControlType::Label, "Build date:", buildDate, ControlColor::Turquoise, tab );
+
+    labelStatus = ESPUI.addControl( ControlType::Label, "GPS receivers", "", ControlColor::Turquoise, tab );
   }
 
   // Network Tab

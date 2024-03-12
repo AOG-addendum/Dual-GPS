@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include "main.hpp"
 
+time_t RelPosNedMillis;
+time_t NavPvtMillis;
+
 void getUBX() {
 	bool checksumOk1 = false, checksumOk2 = false;
 	byte incomByte1 = 0, incomByte2 = 0, idx1 = 0, idx2 = 0;
@@ -29,6 +32,7 @@ void getUBX() {
 		else {
 			//add incoming Byte to UBX
 			((unsigned char*)(&UBXRelPosNED[nextUBXcount2]))[UBXDigit2 - 2] = incomByte2;
+			RelPosNedMillis = millis();
 			UBXDigit2++;
 			//if (gpsConfig.debugmodeUBX) { Serial.print(incomByte2); Serial.print(": incoming byte number: "); Serial.println(UBXDigit2); }
 
@@ -173,6 +177,7 @@ void getUBX() {
 		else {
 			//add incoming Byte to UBX
 			((unsigned char*)(&UBXPVT1[nextUBXcount1]))[UBXDigit1 - 2] = incomByte1;
+			NavPvtMillis = millis();
 			UBXDigit1++;
 			//if (gpsConfig.debugmodeUBX) { Serial.print(incomByte1); Serial.print(": incoming byte number: "); Serial.println(UBXDigit1); }
 

@@ -22,6 +22,10 @@ extern SoftwareSerial NmeaTransmitter;
 
 extern uint16_t labelLoad;
 extern uint16_t labelHeading;
+extern uint16_t labelStatus;
+
+extern time_t RelPosNedMillis;
+extern time_t NavPvtMillis;
 
 //Kalman filter roll
 extern double rollK, rollPc, rollG, rollXp, rollZp, rollXe;
@@ -182,6 +186,8 @@ struct GPS_Config {
 
   uint8_t gpioWifiLed = 32;
   uint8_t WifiLedOnLevel = HIGH;    //HIGH = LED on high, LOW = LED on low
+
+  uint8_t gpioDcPowerGood = 5;
 
   uint32_t baudrate = 115200;
 

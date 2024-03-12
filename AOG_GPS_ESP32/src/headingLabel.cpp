@@ -20,6 +20,35 @@ void headingDisplay ( void* z ){
     Control* labelHeadingHandle = ESPUI.getControl( labelHeading );
     labelHeadingHandle->value = str;
     ESPUI.updateControlAsync( labelHeadingHandle );
+
+    if( digitalRead( gpsConfig.gpioDcPowerGood ) == HIGH ){
+      str = "DC power good: running";
+    } else {
+      str = "DC power low: not running";
+    }
+    str += "\nNAV-PVT message received: ";
+    time_t millis_elapsed = millis() - NavPvtMillis;
+    if( millis_elapsed > 1000 ){
+      str += ( millis_elapsed / 1000 );
+      str += " seconds ago";
+    } else {
+      str += millis_elapsed;
+      str += " millis ago";
+    }
+    str += "\nRelPosNED message received: ";
+    millis_elapsed = millis() - RelPosNedMillis;
+    if( millis_elapsed > 1000 ){
+      str += ( millis_elapsed / 1000 );
+      str += " seconds ago";
+    } else {
+      str += millis_elapsed;
+      str += " millis ago";
+    }
+
+    Control* labelStatusHandle = ESPUI.getControl( labelStatus );
+    labelStatusHandle->value = str;
+    ESPUI.updateControlAsync( labelStatusHandle );
+
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );
   }
 }
