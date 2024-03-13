@@ -22,10 +22,13 @@ extern SoftwareSerial NmeaTransmitter;
 
 extern uint16_t labelLoad;
 extern uint16_t labelHeading;
-extern uint16_t labelStatus;
+extern uint16_t labelGpsReceivers;
+extern uint16_t labelPwmOut;
 
 extern time_t RelPosNedMillis;
 extern time_t NavPvtMillis;
+
+extern double mphPwm;
 
 //Kalman filter roll
 extern double rollK, rollPc, rollG, rollXp, rollZp, rollXe;

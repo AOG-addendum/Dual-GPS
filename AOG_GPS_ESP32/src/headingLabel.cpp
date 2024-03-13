@@ -43,11 +43,21 @@ void headingDisplay ( void* z ){
     } else {
       str += millis_elapsed;
       str += " millis ago";
+
     }
 
-    Control* labelStatusHandle = ESPUI.getControl( labelStatus );
-    labelStatusHandle->value = str;
-    ESPUI.updateControlAsync( labelStatusHandle );
+    Control* labelGpsReceiversHandle = ESPUI.getControl( labelGpsReceivers );
+    labelGpsReceiversHandle->value = str;
+    ESPUI.updateControlAsync( labelGpsReceiversHandle );
+
+    str = "Pwm: ";
+    str += mphPwm;
+    str += "Hz\ngSpeed: ";
+    str += UBXPVT1[UBXRingCount1].gSpeed;
+
+    Control* labelPwmOutHandle = ESPUI.getControl( labelPwmOut );
+    labelPwmOutHandle->value = str;
+    ESPUI.updateControlAsync( labelPwmOutHandle );
 
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );
   }
