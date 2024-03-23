@@ -1,13 +1,15 @@
 
 #include "main.hpp"
 
+double mphPwm;
+
 void SpeedPWM ( void* z ){
   constexpr TickType_t xFrequency = 20;
   TickType_t xLastWakeTime = xTaskGetTickCount();
 
   for( ;; ) {
 
-    double mphPwm = float( UBXPVT1[UBXRingCount1].gSpeed ) * gpsConfig.velocityHzPerMPH;
+    mphPwm = float( UBXPVT1[UBXRingCount1].gSpeed ) * gpsConfig.velocityHzPerMPH;
     mphPwm *= 0.0022369363; // 1 gSpeed = 0.0036 km/h = 0.0022369363 mile/h 
     ledcWriteTone( 0, mphPwm );
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );
