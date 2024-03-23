@@ -129,9 +129,9 @@ constexpr uint8_t sizeOfUBXArray = 3;
 extern NAV_PVT UBXPVT1[sizeOfUBXArray];
 
 //NMEA
-extern uint8_t OGIBuffer[90], HDTBuffer[20], VTGBuffer[50], GGABuffer[80];
+extern uint8_t OGIBuffer[90], HDTBuffer[20], VTGBuffer[50], GGABuffer[80], RMCBuffer[80];
 extern bool newOGI, newHDT, newGGA, newVTG;
-extern uint8_t OGIdigit, GGAdigit, VTGdigit, HDTdigit;
+extern uint8_t OGIdigit, GGAdigit, VTGdigit, HDTdigit, RMCdigit;
 
 //UBX
 extern uint8_t UBXRingCount1, UBXRingCount2, UBXDigit1, UBXDigit2, OGIfromUBX;
@@ -210,6 +210,7 @@ struct GPS_Config {
   bool sendSerialNmeaVTG = 0;                     //1: send Nmea message 0: off
   bool sendSerialNmeaGGA = 1;                     //1: send Nmea message 0: off
   bool sendSerialNmeaHDT = 0;                     //1: send Nmea message 0: off
+  bool sendSerialNmeaRMC = 0;                     //1: send Nmea message 0: off
   uint16_t serialNmeaBaudrate = 38400;
   uint8_t serialNmeaMessagesPerSec = 5;
 
@@ -306,5 +307,6 @@ extern void buildGGA();
 extern void buildVTG();
 extern void buildHDT();
 extern void buildOGI();
+extern void buildRMC();
 extern void getUBX();
 extern void NmeaOut();

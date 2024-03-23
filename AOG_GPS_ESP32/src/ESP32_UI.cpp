@@ -228,6 +228,10 @@ void initESPUI ( void ) {
     []( Control * control, int id ) {
       gpsConfig.sendSerialNmeaHDT = control->value.toInt() == 1;
     } );
+    ESPUI.addControl( ControlType::Switcher, "Send $RMC", gpsConfig.sendSerialNmeaRMC ? "1" : "0", ControlColor::Peterriver, tab,
+    []( Control * control, int id ) {
+      gpsConfig.sendSerialNmeaRMC = control->value.toInt() == 1;
+    } );
 
     {
       uint16_t baudrate = ESPUI.addControl( ControlType::Select, "Serial NMEA Baudrate*", String( gpsConfig.serialNmeaBaudrate ), ControlColor::Wetasphalt, tab,

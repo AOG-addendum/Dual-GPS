@@ -18,6 +18,10 @@ void NmeaOut (){
       NmeaTransmitter.write( HDTBuffer, HDTdigit - 1 ); 
       NmeaTransmitter.println();
     }
+    if( gpsConfig.sendSerialNmeaRMC ){
+      NmeaTransmitter.write( RMCBuffer, RMCdigit - 1 ); 
+      NmeaTransmitter.println();
+    }
   }
 }
 

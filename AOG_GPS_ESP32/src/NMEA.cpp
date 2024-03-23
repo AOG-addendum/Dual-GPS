@@ -78,9 +78,9 @@ $PAOGI
 #include "main.hpp"
 
 //NMEA
-uint8_t OGIBuffer[90], HDTBuffer[20], VTGBuffer[50], GGABuffer[80];
-bool newOGI = false, newHDT = false, newGGA = false, newVTG = false;
-uint8_t OGIdigit = 0, GGAdigit = 0, VTGdigit = 0, HDTdigit = 0;
+uint8_t OGIBuffer[90], HDTBuffer[20], VTGBuffer[50], GGABuffer[80], RMCBuffer[80];
+bool newOGI = false, newHDT = false, newGGA = false, newVTG = false, newRMC = false;
+uint8_t OGIdigit = 0, GGAdigit = 0, VTGdigit = 0, HDTdigit = 0, RMCdigit = 0;
 
 void buildOGI() {
 	byte CRC = 0;
@@ -654,4 +654,183 @@ void buildVTG() {
 	VTGBuffer[VTGdigit++] = 0x0A;
 
 	newVTG = true;
+}
+
+void buildRMC() {
+	byte tempbyt = 0, CRC = 0;
+
+	//create $GPRMC
+	RMCBuffer[0] = 0x24;//$
+	RMCBuffer[1] = 0x47;//G
+	RMCBuffer[2] = 0x50;//P
+	RMCBuffer[3] = 0x52;//R
+	RMCBuffer[4] = 0x4D;//M
+	RMCBuffer[5] = 0x43;//C
+	RMCBuffer[6] = 0x2C;//,
+
+	RMCdigit = 7;
+
+	//always +48 to get ASCII: "0" = 48
+	// time stamp hhmmss
+	byte time = UBXPVT1[UBXRingCount1].hour;
+	RMCBuffer[RMCdigit++] = (time / 10) + 48;
+	time = time % 10;
+	RMCBuffer[RMCdigit++] = time + 48;
+	time = UBXPVT1[UBXRingCount1].min;
+	RMCBuffer[RMCdigit++] = (time / 10) + 48;
+	time = time % 10;
+	RMCBuffer[RMCdigit++] = time + 48;
+	time = UBXPVT1[UBXRingCount1].sec;
+	RMCBuffer[RMCdigit++] = (time / 10) + 48;
+	time = time % 10;
+	RMCBuffer[RMCdigit++] = time + 48;
+	RMCBuffer[RMCdigit++] = 0x2E;//.
+	long timel = UBXPVT1[UBXRingCount1].nano / 1000000;//ms
+	RMCBuffer[RMCdigit++] = (timel / 100) + 48;
+	timel = timel % 100;
+	RMCBuffer[RMCdigit++] = (timel / 10) + 48;
+
+	RMCBuffer[RMCdigit++] = 0x2C;//,
+
+	//Status: A/V
+	RMCBuffer[RMCdigit++] = 0x41; //FIXME
+
+	//lat: xx min min . min/10 .. 4.5 digits
+	long Lat = UBXPVT1[UBXRingCount1].lat;
+	//N/S?	
+	byte Sign = 0x53;//S
+	if (Lat > 0) { Sign = 0x4E; }//N
+	Lat = abs(Lat);
+	RMCBuffer[RMCdigit++] = (Lat / 100000000) + 48;
+	Lat = Lat % 100000000;
+	RMCBuffer[RMCdigit++] = (Lat / 10000000) + 48;
+	Lat = Lat % 10000000;
+	Lat = Lat * 0.6;//dec to min
+	RMCBuffer[RMCdigit++] = (Lat / 1000000) + 48;
+	Lat = Lat % 1000000;
+	RMCBuffer[RMCdigit++] = (Lat / 100000) + 48;
+	Lat = Lat % 100000;
+	RMCBuffer[RMCdigit++] = 0x2E;//.
+	RMCBuffer[RMCdigit++] = (Lat / 10000) + 48;
+	Lat = Lat % 10000;
+	RMCBuffer[RMCdigit++] = (Lat / 1000) + 48;
+	Lat = Lat % 1000;
+	RMCBuffer[RMCdigit++] = (Lat / 100) + 48;
+	Lat = Lat % 100;
+	RMCBuffer[RMCdigit++] = (Lat / 10) + 48;
+	Lat = Lat % 10;
+	RMCBuffer[RMCdigit++] = Lat + 48;
+
+	RMCBuffer[RMCdigit++] = 0x2C;//,
+	//N/S
+	RMCBuffer[RMCdigit++] = Sign;
+	RMCBuffer[RMCdigit++] = 0x2C;//,
+
+	//lon: xxx min min . min/10 .. 5.5 digits
+	long Lon = UBXPVT1[UBXRingCount1].lon;
+	//E/W?
+	if (Lon < 0) { Sign = 0x57; }//W
+	else { Sign = 0x45; }//E
+	Lon = abs(Lon);
+	RMCBuffer[RMCdigit++] = (Lon / 1000000000) + 48;
+	Lon = Lon % 1000000000;
+	RMCBuffer[RMCdigit++] = (Lon / 100000000) + 48;
+	Lon = Lon % 100000000;
+	RMCBuffer[RMCdigit++] = (Lon / 10000000) + 48;
+	Lon = Lon % 10000000;
+	Lon = Lon * 0.6;//dec to min
+	RMCBuffer[RMCdigit++] = (Lon / 1000000) + 48;
+	Lon = Lon % 1000000;
+	RMCBuffer[RMCdigit++] = (Lon / 100000) + 48;
+	Lon = Lon % 100000;
+	RMCBuffer[RMCdigit++] = 0x2E;//.
+	RMCBuffer[RMCdigit++] = (Lon / 10000) + 48;
+	Lon = Lon % 10000;
+	RMCBuffer[RMCdigit++] = (Lon / 1000) + 48;
+	Lon = Lon % 1000;
+	RMCBuffer[RMCdigit++] = (Lon / 100) + 48;
+	Lon = Lon % 100;
+	RMCBuffer[RMCdigit++] = (Lon / 10) + 48;
+	Lon = Lon % 10;
+	RMCBuffer[RMCdigit++] = Lon + 48;
+
+	RMCBuffer[RMCdigit++] = 0x2C;//,
+	//E/W
+	RMCBuffer[RMCdigit++] = Sign;
+	RMCBuffer[RMCdigit++] = 0x2C;//,
+
+	//ground speed knots
+	if (drivDirect == 2) {//backwards, so write "-"
+		RMCBuffer[RMCdigit++] = 0x2D;
+	}
+	long speed1000Knotes;
+	if (UBXPVT1[UBXRingCount1].gSpeed > 30) { speed1000Knotes = (1.9438445 * UBXPVT1[UBXRingCount1].gSpeed); }
+	else speed1000Knotes = 0;//send 0 if slower than 0,1km/h
+	RMCBuffer[RMCdigit++] = (speed1000Knotes / 10000) + 48;
+	speed1000Knotes = speed1000Knotes % 10000;
+	RMCBuffer[RMCdigit++] = (speed1000Knotes / 1000) + 48;
+	speed1000Knotes = speed1000Knotes % 1000;
+	RMCBuffer[RMCdigit++] = 0x2E;//.
+	RMCBuffer[RMCdigit++] = (speed1000Knotes / 100) + 48;
+	speed1000Knotes = speed1000Knotes % 100;
+	RMCBuffer[RMCdigit++] = (speed1000Knotes / 10) + 48;
+	speed1000Knotes = speed1000Knotes % 10;
+	RMCBuffer[RMCdigit++] = speed1000Knotes + 48;
+	RMCBuffer[RMCdigit++] = 0x2C;//,
+	RMCBuffer[RMCdigit++] = 0x4E;//N
+	RMCBuffer[RMCdigit++] = 0x2C;//,
+
+	//course over ground
+	double tempGPSHead;
+	tempGPSHead = HeadingMix; //decided in Heading calc
+	tempbyt = byte(tempGPSHead / 100);
+	tempGPSHead = tempGPSHead - tempbyt * 100;
+	RMCBuffer[RMCdigit++] = tempbyt + 48;
+	tempbyt = byte(tempGPSHead / 10);
+	tempGPSHead = tempGPSHead - tempbyt * 10;
+	RMCBuffer[RMCdigit++] = tempbyt + 48;
+	tempbyt = byte(tempGPSHead);
+	tempGPSHead = tempGPSHead - tempbyt;
+	RMCBuffer[RMCdigit++] = tempbyt + 48;
+	RMCBuffer[RMCdigit++] = 0x2E;//.
+
+	//Date
+	uint8_t date = UBXPVT1[UBXRingCount1].day;
+	RMCBuffer[RMCdigit++] = ( date / 10 ) + 48;
+	date = date % 10;
+	RMCBuffer[RMCdigit++] = date + 48;
+	date = UBXPVT1[UBXRingCount1].month;
+	RMCBuffer[RMCdigit++] = ( date / 10 ) + 48;
+	date = date % 10;
+	RMCBuffer[RMCdigit++] = date + 48;
+	date = UBXPVT1[UBXRingCount1].year % 100;
+	RMCBuffer[RMCdigit++] = ( date / 10 ) + 48;
+	date = date % 10;
+	RMCBuffer[RMCdigit++] = date + 48;
+	RMCBuffer[RMCdigit++] = 0x2C;//,
+
+	//no magnetic variation
+	RMCBuffer[RMCdigit++] = 0x2C;//,
+
+	//Mode
+	RMCBuffer[RMCdigit++] = 0x44;//D
+	RMCBuffer[RMCdigit++] = 0x2C;//,
+
+	RMCBuffer[RMCdigit++] = 0x2A;//*
+
+	//checksum
+	for (byte index = 1; index <= (RMCdigit); index++) {
+		if (RMCBuffer[index] == 0x2A) {
+			break;
+		}
+		CRC = CRC ^ RMCBuffer[index];
+	}
+	RMCBuffer[RMCdigit++] = byte(CRC / 16) + 48;
+	if (RMCBuffer[RMCdigit - 1] > 57) { RMCBuffer[RMCdigit - 1] += 7; }//ASCII 48 = 0 ASCII A = 65
+	RMCBuffer[RMCdigit++] = byte(CRC % 16) + 48;
+	if (RMCBuffer[RMCdigit - 1] > 57) { RMCBuffer[RMCdigit - 1] += 7; }//ASCII 48 = 0 ASCII A = 65
+	RMCBuffer[RMCdigit++] = 0x0D;
+	RMCBuffer[RMCdigit++] = 0x0A;
+
+	newRMC = true;
 }

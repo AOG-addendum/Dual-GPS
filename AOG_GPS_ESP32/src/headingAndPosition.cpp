@@ -683,6 +683,7 @@ void headingAndPosition ( void* z ){
 			buildVTG();
 			buildHDT();
 			buildOGI();
+			buildRMC();
 
 			if( gpsConfig.sendOGI == 1 ){
 				udpRoof.writeTo( OGIBuffer, OGIdigit, ipDestination, gpsConfig.aogPortSendTo );

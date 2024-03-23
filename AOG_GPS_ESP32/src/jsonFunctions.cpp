@@ -97,6 +97,7 @@ json parseGpsConfigToJson( const GPS_Config& config ) {
   j["serialNmea"]["sendSerialNmeaVTG"] = config.sendSerialNmeaVTG;
   j["serialNmea"]["sendSerialNmeaGGA"] = config.sendSerialNmeaGGA;
   j["serialNmea"]["sendSerialNmeaHDT"] = config.sendSerialNmeaHDT;
+  j["serialNmea"]["sendRMC"] = config.sendSerialNmeaRMC;
   j["serialNmea"]["serialNmeaBaudrate"] = config.serialNmeaBaudrate;
   j["serialNmea"]["serialNmeaMessagesPerSecond"] = config.serialNmeaMessagesPerSec;
 
@@ -160,6 +161,7 @@ void parseJsonToGpsConfig( json& j, GPS_Config& config ) {
       config.sendSerialNmeaVTG = j.value( "/serialNmea/sendSerialNmeaVTG"_json_pointer, gpsConfigDefaults.sendSerialNmeaVTG );
       config.sendSerialNmeaGGA = j.value( "/serialNmea/sendSerialNmeaGGA"_json_pointer, gpsConfigDefaults.sendSerialNmeaGGA );
       config.sendSerialNmeaHDT = j.value( "/serialNmea/sendSerialNmeaHDT"_json_pointer, gpsConfigDefaults.sendSerialNmeaHDT );
+      config.sendSerialNmeaRMC = j.value( "/serialNmea/sendRMC"_json_pointer, gpsConfigDefaults.sendSerialNmeaRMC );
       config.serialNmeaBaudrate = j.value( "/serialNmea/serialNmeaBaudrate"_json_pointer, gpsConfigDefaults.serialNmeaBaudrate );
       config.serialNmeaMessagesPerSec = j.value( "/serialNmea/serialNmeaMessagesPerSecond"_json_pointer, gpsConfigDefaults.serialNmeaMessagesPerSec );
 
