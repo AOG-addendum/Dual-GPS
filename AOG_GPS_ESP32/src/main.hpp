@@ -27,6 +27,8 @@ extern uint16_t labelPwmOut;
 
 extern time_t RelPosNedMillis;
 extern time_t NavPvtMillis;
+extern bool NavPVTValid;
+extern bool RelPosNEDValid;
 
 extern double mphPwm;
 

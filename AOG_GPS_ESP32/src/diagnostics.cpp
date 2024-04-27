@@ -26,7 +26,12 @@ void headingDisplay ( void* z ){
     } else {
       str = "DC power low: not running";
     }
-    str += "\nNAV-PVT message received: ";
+    if( NavPVTValid == true ){
+      str += "\nValid ";
+    } else {
+      str += "\nInvalid ";
+    }
+    str += "NAV-PVT message received: ";
     time_t millis_elapsed = millis() - NavPvtMillis;
     if( millis_elapsed > 1000 ){
       str += ( millis_elapsed / 1000 );
@@ -35,7 +40,12 @@ void headingDisplay ( void* z ){
       str += millis_elapsed;
       str += " millis ago";
     }
-    str += "\nRelPosNED message received: ";
+    if( RelPosNEDValid == true ){
+      str += "\nValid ";
+    } else {
+      str += "\nInvalid ";
+    }
+    str += "RelPosNED message received: ";
     millis_elapsed = millis() - RelPosNedMillis;
     if( millis_elapsed > 1000 ){
       str += ( millis_elapsed / 1000 );
@@ -43,10 +53,14 @@ void headingDisplay ( void* z ){
     } else {
       str += millis_elapsed;
       str += " millis ago";
-
     }
 
     Control* labelGpsReceiversHandle = ESPUI.getControl( labelGpsReceivers );
+    if( NavPVTValid == false or RelPosNEDValid == false){
+      labelGpsReceiversHandle->color = ControlColor::Alizarin;
+    } else {
+      labelGpsReceiversHandle->color = ControlColor::Turquoise;
+    }
     labelGpsReceiversHandle->value = str;
     ESPUI.updateControlAsync( labelGpsReceiversHandle );
 
