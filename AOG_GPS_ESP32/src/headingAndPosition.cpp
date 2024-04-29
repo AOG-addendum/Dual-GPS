@@ -68,6 +68,11 @@ uint8_t dualAntNoValueCount = 0, dualAntNoValueMax = 20;// if dual Ant value not
 NAV_PVT UBXPVT1[sizeOfUBXArray];
 NAV_RELPOSNED UBXRelPosNED[sizeOfUBXArray];
 
+QueueHandle_t HDTQueue = xQueueCreate( 10, sizeof( HDTBuffer ) );
+QueueHandle_t VTGQueue = xQueueCreate( 10, sizeof( VTGBuffer ) );
+QueueHandle_t GGAQueue = xQueueCreate( 10, sizeof( GGABuffer ) );
+QueueHandle_t RMCQueue = xQueueCreate( 10, sizeof( RMCBuffer ) );
+
 // Variables ------------------------------
 
 
@@ -720,7 +725,18 @@ void headingAndPosition ( void* z ){
 				udpRoof.writeTo( HDTBuffer, HDTdigit, ipDestination, gpsConfig.aogPortSendTo );
 				newHDT = false;
 			}
-			NmeaOut();
+			if( gpsConfig.sendSerialNmeaHDT ){
+				xQueueSend( HDTQueue, &HDTBuffer, 0 );
+			}
+			if( gpsConfig.sendSerialNmeaVTG ){
+				xQueueSend( VTGQueue, &VTGBuffer, 0 );
+			}
+			if( gpsConfig.sendSerialNmeaGGA ){
+				xQueueSend( GGAQueue, &GGABuffer, 0 );
+			}
+			if( gpsConfig.sendSerialNmeaRMC ){
+				xQueueSend( RMCQueue, &RMCBuffer, 0 );
+			}
 		}
 
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );

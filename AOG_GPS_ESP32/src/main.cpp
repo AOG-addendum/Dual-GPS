@@ -115,6 +115,7 @@ void setup( void ) {
   initIdleStats();
 
   initHeadingAndPosition();
+  initNmeaOut();
   initSpeedPWM();
   initHeadingDisplay();
 }

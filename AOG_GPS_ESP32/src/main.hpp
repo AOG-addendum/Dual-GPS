@@ -18,8 +18,6 @@
 extern AsyncUDP udpRoof;
 extern IPAddress ipDestination; //IP address to send UDP data to
 
-extern SoftwareSerial NmeaTransmitter;
-
 extern uint16_t labelLoad;
 extern uint16_t labelHeading;
 extern uint16_t labelGpsReceivers;
@@ -137,6 +135,12 @@ extern NAV_PVT UBXPVT1[sizeOfUBXArray];
 extern uint8_t OGIBuffer[90], HDTBuffer[20], VTGBuffer[50], GGABuffer[80], RMCBuffer[80];
 extern bool newOGI, newHDT, newGGA, newVTG;
 extern uint8_t OGIdigit, GGAdigit, VTGdigit, HDTdigit, RMCdigit;
+
+extern SoftwareSerial NmeaTransmitter;
+extern QueueHandle_t HDTQueue;
+extern QueueHandle_t VTGQueue;
+extern QueueHandle_t GGAQueue;
+extern QueueHandle_t RMCQueue;
 
 //UBX
 extern uint8_t UBXRingCount1, UBXRingCount2, UBXDigit1, UBXDigit2, OGIfromUBX;
