@@ -51,9 +51,9 @@ void getUBX() {
 					Serial.println(UBXRelPosNED[nextUBXcount2].id, HEX);
 				}*/
 					UBXDigit2 = 0;
+					RelPosNEDValid = false;
 				}
 				else { if (gpsConfig.debugmodeUBX) { Serial.println("UBX RelPosNED found"); } }
-				RelPosNEDValid = false;
 			}//5
 			else
 			{
@@ -199,9 +199,9 @@ void getUBX() {
 				if (!((UBXPVT1[nextUBXcount1].cls == 0x01) && (UBXPVT1[nextUBXcount1].id == 0x07))) {
 					//wrong sentence
 					UBXDigit1 = 0;
+					NavPVTValid = false;
 				}
 				//else { if (debugmode) { Serial.println("UBX PVT1 found"); } }
-				NavPVTValid = false;
 			}//5
 			else
 			{
@@ -249,8 +249,10 @@ void getUBX() {
 							}
 							NavPVTValid = true;
 						}
-						else { if (gpsConfig.debugmodeUBX) { Serial.println("UBX1 PVT checksum invalid"); } }
-						NavPVTValid = false;
+						else { 
+							if (gpsConfig.debugmodeUBX) { Serial.println("UBX1 PVT checksum invalid"); }
+							NavPVTValid = false;
+						}
 					}//UBX complete
 					else
 					{//too long

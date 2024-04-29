@@ -21,7 +21,8 @@ void headingDisplay ( void* z ){
     labelHeadingHandle->value = str;
     ESPUI.updateControlAsync( labelHeadingHandle );
 
-    if( digitalRead( gpsConfig.gpioDcPowerGood ) == HIGH ){
+    bool power = digitalRead( gpsConfig.gpioDcPowerGood );
+    if( power == HIGH ){
       str = "DC power good: running";
     } else {
       str = "DC power low: not running";
@@ -56,7 +57,7 @@ void headingDisplay ( void* z ){
     }
 
     Control* labelGpsReceiversHandle = ESPUI.getControl( labelGpsReceivers );
-    if( NavPVTValid == false or RelPosNEDValid == false){
+    if( NavPVTValid == false or RelPosNEDValid == false or power == LOW ){
       labelGpsReceiversHandle->color = ControlColor::Alizarin;
     } else {
       labelGpsReceiversHandle->color = ControlColor::Turquoise;
