@@ -308,43 +308,12 @@ void initESPUI ( void ) {
   // Default Configurations Tab
   {
     uint16_t tab = ESPUI.addControl( ControlType::Tab, "Configurations", "Configurations" );
-    ESPUI.addControl( ControlType::Label, "Attention:", "These Buttons here reset the whole config. This affects the WIFI too, if not configured otherwise below. You have to press \"Apply & Reboot\" above to actualy store them.", ControlColor::Carrot, tab );
 
     ESPUI.addControl( ControlType::Label, "OTA Update:", "<a href='/update'>Update</a>", ControlColor::Carrot, tab );
 
     ESPUI.addControl( ControlType::Label, "Download the config:", "<a href='config.json'>Configuration</a>", ControlColor::Carrot, tab );
 
-    ESPUI.addControl( ControlType::Label, "Upload the config:", "<form method='POST' action='/upload-config' enctype='multipart/form-data'><input name='f' type='file'><input type='submit'></form>", ControlColor::Carrot, tab );
-
-    // onchange='this.form.submit()'
-    {
-      ESPUI.addControl( ControlType::Switcher, "Retain WIFI settings", gpsConfig.retainWifiSettings ? "1" : "0", ControlColor::Peterriver, tab,
-      []( Control * control, int id ) {
-        gpsConfig.retainWifiSettings = control->value.toInt() == 1;
-      } );
-    }
-    {
-      ESPUI.addControl( ControlType::Button, "Set Settings To Default*", "Defaults", ControlColor::Wetasphalt, tab,
-      []( Control * control, int id ) {
-        char ssid[24], password[24], hostname[24];
-
-        if( gpsConfig.retainWifiSettings ) {
-          memcpy( ssid, gpsConfig.ssid, sizeof( ssid ) );
-          memcpy( password, gpsConfig.password, sizeof( password ) );
-          memcpy( hostname, gpsConfig.hostname, sizeof( hostname ) );
-        }
-
-        gpsConfig = gpsConfigDefaults;
-
-        if( gpsConfig.retainWifiSettings ) {
-          memcpy( gpsConfig.ssid, ssid, sizeof( ssid ) );
-          memcpy( gpsConfig.password, password, sizeof( password ) );
-          memcpy( gpsConfig.hostname, hostname, sizeof( hostname ) );
-        }
-
-        setResetButtonToRed();
-      } );
-    }
+    ESPUI.addControl( ControlType::Label, "Upload the config:", "<form method='POST' action='/upload-config' enctype='multipart/form-data'><input name='f' type='file'><input type='submit'>ESP32 will restart after submitting</form>", ControlColor::Carrot, tab );
 
     tabConfigurations = tab;
 
@@ -376,10 +345,8 @@ void initESPUI ( void ) {
 
       if( final ) {
         request->_tempFile.close();
-        setResetButtonToRed();
-        String str( "/#tab" );
-        str += tabConfigurations;
-        request->redirect( str );
+        delay(10);
+        ESP.restart();
       }
     }
   } );
