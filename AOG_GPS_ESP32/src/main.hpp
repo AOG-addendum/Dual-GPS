@@ -189,7 +189,7 @@ struct GPS_Config {
     KilometersPerHour = 1
   } speedUnits = SpeedUnits::MilesPerHour;
 
-  char ssid[24] = "AOG hotspot";
+  char ssid[24] = "AOG hub";
   char password[24] = "password";
   char hostname[24] = "Dual GPS";
 
