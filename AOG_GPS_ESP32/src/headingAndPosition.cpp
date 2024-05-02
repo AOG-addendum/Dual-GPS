@@ -68,10 +68,10 @@ uint8_t dualAntNoValueCount = 0, dualAntNoValueMax = 20;// if dual Ant value not
 NAV_PVT UBXPVT1[sizeOfUBXArray];
 NAV_RELPOSNED UBXRelPosNED[sizeOfUBXArray];
 
-QueueHandle_t HDTQueue = xQueueCreate( 10, sizeof( HDTBuffer ) );
-QueueHandle_t VTGQueue = xQueueCreate( 10, sizeof( VTGBuffer ) );
-QueueHandle_t GGAQueue = xQueueCreate( 10, sizeof( GGABuffer ) );
-QueueHandle_t RMCQueue = xQueueCreate( 10, sizeof( RMCBuffer ) );
+QueueHandle_t HDTQueue = xQueueCreate( 2, sizeof( HDTBuffer ) );
+QueueHandle_t VTGQueue = xQueueCreate( 2, sizeof( VTGBuffer ) );
+QueueHandle_t GGAQueue = xQueueCreate( 2, sizeof( GGABuffer ) );
+QueueHandle_t RMCQueue = xQueueCreate( 2, sizeof( RMCBuffer ) );
 
 // Variables ------------------------------
 
