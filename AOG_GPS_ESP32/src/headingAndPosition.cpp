@@ -73,6 +73,9 @@ QueueHandle_t VTGQueue = xQueueCreate( 2, sizeof( VTGBuffer ) );
 QueueHandle_t GGAQueue = xQueueCreate( 2, sizeof( GGABuffer ) );
 QueueHandle_t RMCQueue = xQueueCreate( 2, sizeof( RMCBuffer ) );
 
+bool powerUnstable = false;
+time_t powerUnstableMillis = 0;
+
 // Variables ------------------------------
 
 
@@ -737,6 +740,13 @@ void headingAndPosition ( void* z ){
 			if( gpsConfig.sendSerialNmeaRMC ){
 				xQueueSend( RMCQueue, &RMCBuffer, 0 );
 			}
+		}
+		if( digitalRead( gpsConfig.gpioDcPowerGood ) == LOW ){
+				powerUnstableMillis = millis();
+				powerUnstable = true;
+			}
+			else if( ( millis() - powerUnstableMillis ) / 60000 > 5){
+				powerUnstable = false;
 		}
 
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );

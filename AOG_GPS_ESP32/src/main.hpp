@@ -88,6 +88,9 @@ extern bool dualGPSHeadingPresent, rollPresent, virtAntPosPresent, add360ToRelPo
 extern double roll, rollToAOG;
 extern uint8_t dualAntNoValueCount, dualAntNoValueMax;
 
+extern bool powerUnstable;
+extern time_t powerUnstableMillis;
+
 struct NAV_PVT {
     uint8_t cls;
     uint8_t id;
