@@ -6,6 +6,7 @@
 #include "jsonFunctions.hpp"
 #include "main.hpp"
 
+#include <ESPmDNS.h>
 #include <WiFi.h>
 
 #include <DNSServer.h>
@@ -118,6 +119,10 @@ void setup( void ) {
   initNmeaOut();
   initSpeedPWM();
   initHeadingDisplay();
+
+  if( !MDNS.begin( "gps" )){
+    Serial.println( "Error starting mDNS" );
+  }
 }
 
 void loop( void ) {
