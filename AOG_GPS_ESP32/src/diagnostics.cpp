@@ -22,14 +22,14 @@ void headingDisplay ( void* z ){
     ESPUI.updateControlAsync( labelHeadingHandle );
 
     bool power = digitalRead( gpsConfig.gpioDcPowerGood );
-    if( powerUnstable == true ){
+    if( power == LOW ) {
+      str = "DC power low: not running";
+    } else if( powerUnstable == true ){
       str = "DC power unstable ";
       str += (( time_t ) millis() - powerUnstableMillis ) / 1000 ;
       str += " second(s) ago: running";
     } else if( power == HIGH ){
       str = "DC power good: running";
-    } else {
-      str = "DC power low: not running";
     }
     if( NavPVTValid == true ){
       str += "\nValid ";
