@@ -37,12 +37,12 @@ void headingDisplay ( void* z ){
       str += "\nInvalid ";
     }
     str += "NAV-PVT message received: ";
-    time_t millis_elapsed = millis() - NavPvtMillis;
-    if( millis_elapsed > 1000 ){
-      str += ( millis_elapsed / 1000 );
+    time_t NAV_millis_elapsed = millis() - NavPvtMillis;
+    if( NAV_millis_elapsed > 1000 ){
+      str += ( NAV_millis_elapsed / 1000 );
       str += " seconds ago";
     } else {
-      str += millis_elapsed;
+      str += NAV_millis_elapsed;
       str += " millis ago";
     }
     if( RelPosNEDValid == true ){
@@ -51,17 +51,18 @@ void headingDisplay ( void* z ){
       str += "\nInvalid ";
     }
     str += "RelPosNED message received: ";
-    millis_elapsed = millis() - RelPosNedMillis;
-    if( millis_elapsed > 1000 ){
-      str += ( millis_elapsed / 1000 );
+    time_t RPN_millis_elapsed = millis() - RelPosNedMillis;
+    if( RPN_millis_elapsed > 1000 ){
+      str += ( RPN_millis_elapsed / 1000 );
       str += " seconds ago";
     } else {
-      str += millis_elapsed;
+      str += RPN_millis_elapsed;
       str += " millis ago";
     }
 
     Control* labelGpsReceiversHandle = ESPUI.getControl( labelGpsReceivers );
-    if( NavPVTValid == false or RelPosNEDValid == false or power == LOW or powerUnstable == true ){
+    if( NavPVTValid == false or RelPosNEDValid == false or power == LOW or powerUnstable == true
+        or NAV_millis_elapsed > 150 or RPN_millis_elapsed > 150 ){
       labelGpsReceiversHandle->color = ControlColor::Alizarin;
     } else {
       labelGpsReceiversHandle->color = ControlColor::Turquoise;
