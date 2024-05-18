@@ -10,6 +10,7 @@ uint16_t labelLoad;
 uint16_t labelHeading;
 uint16_t labelGpsReceivers;
 uint16_t labelPwmOut;
+uint16_t labelGpsMessageHz;
 uint16_t buttonReset;
 
 void setResetButtonToRed() {
@@ -50,6 +51,14 @@ void initESPUI ( void ) {
 
     labelGpsReceivers = ESPUI.addControl( ControlType::Label, "GPS receivers", "", ControlColor::Turquoise, tab );
     labelPwmOut = ESPUI.addControl( ControlType::Label, "Speed output", "", ControlColor::Turquoise, tab );
+    labelGpsMessageHz = ESPUI.addControl( ControlType::Label, "GPS message timing", "", ControlColor::Turquoise, tab );
+    ESPUI.addControl( ControlType::Button, "Diagnostics:", "Reset all", ControlColor::Emerald, tab, []( Control * control, int id ) {
+      if( id == B_UP ) {
+        gpsHzMaxMillis = gpsHzCurrentMillis;
+        gpsHzMinMillis = gpsHzCurrentMillis;
+
+      }
+    } );
   }
 
   // Network Tab

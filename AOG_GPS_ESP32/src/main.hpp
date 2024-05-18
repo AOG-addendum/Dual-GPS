@@ -22,6 +22,7 @@ extern uint16_t labelLoad;
 extern uint16_t labelHeading;
 extern uint16_t labelGpsReceivers;
 extern uint16_t labelPwmOut;
+extern uint16_t labelGpsMessageHz;
 
 extern time_t RelPosNedMillis;
 extern time_t NavPvtMillis;
@@ -90,6 +91,9 @@ extern uint8_t dualAntNoValueCount, dualAntNoValueMax;
 
 extern bool powerUnstable;
 extern time_t powerUnstableMillis;
+extern time_t gpsHzMaxMillis;
+extern time_t gpsHzMinMillis;
+extern time_t gpsHzCurrentMillis;
 
 struct NAV_PVT {
     uint8_t cls;

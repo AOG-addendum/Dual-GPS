@@ -78,6 +78,17 @@ void headingDisplay ( void* z ){
     labelPwmOutHandle->value = str;
     ESPUI.updateControlAsync( labelPwmOutHandle );
 
+    str = "Max millis: ";
+    str += gpsHzMaxMillis;
+    str += "\nMin millis: ";
+    str += gpsHzMinMillis;
+    str += "\nCurrent millis: ";
+    str += gpsHzCurrentMillis;
+
+    Control* labelGpsMessageHzHandle = ESPUI.getControl( labelGpsMessageHz );
+    labelGpsMessageHzHandle->value = str;
+    ESPUI.updateControlAsync( labelGpsMessageHzHandle );
+
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );
   }
 }

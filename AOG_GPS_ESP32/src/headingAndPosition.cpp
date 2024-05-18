@@ -56,6 +56,10 @@ int16_t i, iPos;
 int8_t cFixQualGGA;
 // END ai, 07.10.2020: use the GGA Message to determine Fix-Quality
 
+time_t previousMillisHz;
+time_t gpsHzMaxMillis;
+time_t gpsHzMinMillis;
+time_t gpsHzCurrentMillis;
 
 //heading + roll
 double HeadingRelPosNED = 0, cosHeadRelPosNED = 1, HeadingVTG = 0, HeadingVTGOld = 0, cosHeadVTG = 1, HeadingMix = 0, cosHeadMix = 1;
@@ -740,6 +744,10 @@ void headingAndPosition ( void* z ){
 			if( gpsConfig.sendSerialNmeaRMC ){
 				xQueueSend( RMCQueue, &RMCBuffer, 0 );
 			}
+			gpsHzCurrentMillis = millis() - previousMillisHz;
+			previousMillisHz = millis();
+			gpsHzMaxMillis = max(gpsHzCurrentMillis, gpsHzMaxMillis);
+			gpsHzMinMillis = min(gpsHzCurrentMillis, gpsHzMinMillis);
 		}
 		if( digitalRead( gpsConfig.gpioDcPowerGood ) == LOW ){
 				powerUnstableMillis = millis();
