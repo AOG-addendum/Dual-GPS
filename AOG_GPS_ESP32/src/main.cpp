@@ -118,7 +118,7 @@ void setup( void ) {
   initHeadingAndPosition();
   initNmeaOut();
   initSpeedPWM();
-  initHeadingDisplay();
+  initDiagnosticDisplay();
 
   if( !MDNS.begin( "gps" )){
     Serial.println( "Error starting mDNS" );

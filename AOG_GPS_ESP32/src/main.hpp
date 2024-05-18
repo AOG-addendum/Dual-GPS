@@ -317,7 +317,7 @@ extern void initWiFi();
 extern void initHeadingAndPosition();
 extern void initNmeaOut();
 extern void initSpeedPWM();
-extern void initHeadingDisplay();
+extern void initDiagnosticDisplay();
 
 extern void buildGGA();
 extern void buildVTG();

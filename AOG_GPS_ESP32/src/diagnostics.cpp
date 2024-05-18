@@ -1,7 +1,7 @@
 
 #include "main.hpp"
 
-void headingDisplay ( void* z ){
+void diagnosticDisplay ( void* z ){
   constexpr TickType_t xFrequency = 100;
   TickType_t xLastWakeTime = xTaskGetTickCount();
 
@@ -93,6 +93,6 @@ void headingDisplay ( void* z ){
   }
 }
 
-void initHeadingDisplay() {
-  xTaskCreate( headingDisplay, "headingDisplay", 2048, NULL, 2, NULL );
+void initDiagnosticDisplay() {
+  xTaskCreate( diagnosticDisplay, "diagnosticDisplay", 2048, NULL, 2, NULL );
 }
