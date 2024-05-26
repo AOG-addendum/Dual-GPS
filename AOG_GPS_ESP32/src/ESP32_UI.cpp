@@ -51,12 +51,16 @@ void initESPUI ( void ) {
 
     labelGpsReceivers = ESPUI.addControl( ControlType::Label, "GPS receivers", "", ControlColor::Turquoise, tab );
     labelPwmOut = ESPUI.addControl( ControlType::Label, "Speed output", "", ControlColor::Turquoise, tab );
-    labelGpsMessageHz = ESPUI.addControl( ControlType::Label, "GPS message timing", "", ControlColor::Turquoise, tab );
+    labelGpsMessageHz = ESPUI.addControl( ControlType::Label, "GPS message info", "", ControlColor::Turquoise, tab );
     ESPUI.addControl( ControlType::Button, "Diagnostics:", "Reset all", ControlColor::Emerald, tab, []( Control * control, int id ) {
       if( id == B_UP ) {
         gpsHzMaxMillis = gpsHzCurrentMillis;
         gpsHzMinMillis = gpsHzCurrentMillis;
-
+        diagnostics.badChecksumNavPVTCount = 0;
+        diagnostics.wrongLengthNavPVTCount = 0;
+        diagnostics.badChecksumRelPosNEDCount = 0;
+        diagnostics.wrongLengthRelPosNEDCount = 0;
+        saveDiagnostics();
       }
     } );
   }

@@ -20,5 +20,5 @@ extern void saveJsonToFile( const json& json, const char* fileName );
 extern void parseJsonToGpsConfig( json& json, GPS_Config& config );
 extern json parseGpsConfigToJson( const GPS_Config& config );
 
-extern void sendStateTransmission( uint16_t channelId, bool state );
-extern void sendNumberTransmission( uint16_t channelId, double number );
+extern void parseJsonToDiagnostics( json& json, Diagnostics& diagnostics );
+extern json parseDiagnosticsToJson( const Diagnostics& diagnostics );

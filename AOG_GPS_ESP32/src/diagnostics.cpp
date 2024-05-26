@@ -31,12 +31,7 @@ void diagnosticDisplay ( void* z ){
     } else if( power == HIGH ){
       str = "DC power good: running";
     }
-    if( NavPVTValid == true ){
-      str += "\nValid ";
-    } else {
-      str += "\nInvalid ";
-    }
-    str += "NAV-PVT message received: ";
+    str += "\nNAV-PVT message received: ";
     time_t NAV_millis_elapsed = millis() - NavPvtMillis;
     if( NAV_millis_elapsed > 1000 ){
       str += ( NAV_millis_elapsed / 1000 );
@@ -45,12 +40,7 @@ void diagnosticDisplay ( void* z ){
       str += NAV_millis_elapsed;
       str += " millis ago";
     }
-    if( RelPosNEDValid == true ){
-      str += "\nValid ";
-    } else {
-      str += "\nInvalid ";
-    }
-    str += "RelPosNED message received: ";
+    str += "\nRelPosNED message received: ";
     time_t RPN_millis_elapsed = millis() - RelPosNedMillis;
     if( RPN_millis_elapsed > 1000 ){
       str += ( RPN_millis_elapsed / 1000 );
@@ -61,8 +51,7 @@ void diagnosticDisplay ( void* z ){
     }
 
     Control* labelGpsReceiversHandle = ESPUI.getControl( labelGpsReceivers );
-    if( NavPVTValid == false or RelPosNEDValid == false or power == LOW or powerUnstable == true
-        or NAV_millis_elapsed > 150 or RPN_millis_elapsed > 150 ){
+    if( power == LOW or powerUnstable == true or NAV_millis_elapsed > 150 or RPN_millis_elapsed > 150 ){
       labelGpsReceiversHandle->color = ControlColor::Alizarin;
     } else {
       labelGpsReceiversHandle->color = ControlColor::Turquoise;
@@ -85,6 +74,14 @@ void diagnosticDisplay ( void* z ){
     str += gpsHzMinMillis;
     str += "\nCurrent millis: ";
     str += gpsHzCurrentMillis;
+    str += "\nNavPVT bad checksum: ";
+    str += diagnostics.badChecksumNavPVTCount;
+    str += "\nNavPVT wrong length: ";
+    str += diagnostics.wrongLengthNavPVTCount;
+    str += "\nRelPosNED bad checksum: ";
+    str += diagnostics.badChecksumRelPosNEDCount;
+    str += "\nRelPosNED wrong length: ";
+    str += diagnostics.wrongLengthRelPosNEDCount;
 
     Control* labelGpsMessageHzHandle = ESPUI.getControl( labelGpsMessageHz );
     labelGpsMessageHzHandle->value = str;

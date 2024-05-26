@@ -196,3 +196,48 @@ void parseJsonToGpsConfig( json& j, GPS_Config& config ) {
     }
   }
 }
+
+void loadDiagnostics() {
+  {
+    auto j = loadJsonFromFile( "/diagnostics.json" );
+    parseJsonToDiagnostics( j, diagnostics );
+  }
+}
+
+void saveDiagnostics() {
+  {
+    const auto j = parseDiagnosticsToJson( diagnostics );
+    saveJsonToFile( j, "/diagnostics.json" );
+  }
+}
+
+json parseDiagnosticsToJson( const Diagnostics& diagnostics ) {
+  json j;
+
+  j["count"]["badChecksumNavPVT"] = diagnostics.badChecksumNavPVTCount;
+  j["count"]["wrongLengthNavPVT"] = diagnostics.wrongLengthNavPVTCount;
+  j["count"]["badChecksumRelPosNED"] = diagnostics.badChecksumRelPosNEDCount;
+  j["count"]["wrongLengthRelPosNED"] = diagnostics.wrongLengthRelPosNEDCount;
+
+  return j;
+}
+
+void parseJsonToDiagnostics( json& j, Diagnostics& diagnostics ) {
+  if( j.is_object() ) {
+    try {
+   
+      diagnostics.badChecksumNavPVTCount = j.value( "/count/badChecksumNavPVT"_json_pointer, 0 );
+      diagnostics.wrongLengthNavPVTCount = j.value( "/count/wrongLengthNavPVT"_json_pointer, 0 );
+      diagnostics.badChecksumRelPosNEDCount = j.value( "/count/badChecksumRelPosNED"_json_pointer, 0 );
+      diagnostics.wrongLengthRelPosNEDCount = j.value( "/count/wrongLengthRelPosNED"_json_pointer, 0 );
+
+    } catch( json::exception& e ) {
+      // output exception information
+      Serial.print( "message: " );
+      Serial.println( e.what() );
+      Serial.print( "exception id: " );
+      Serial.println( e.id );
+      Serial.flush();
+    }
+  }
+}

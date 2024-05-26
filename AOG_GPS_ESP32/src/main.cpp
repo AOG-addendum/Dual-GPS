@@ -20,6 +20,9 @@
 
 GPS_Config gpsConfig, gpsConfigDefaults;
 Initialisation initialisation;
+Diagnostics diagnostics;
+void loadDiagnostics();
+void saveDiagnostics();
 
 portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
 
@@ -113,6 +116,8 @@ void setup( void ) {
     digitalWrite( gpsConfig.gpioWifiLed, gpsConfig.WifiLedOnLevel );
   }
 
+  loadDiagnostics();
+  
   initIdleStats();
 
   initHeadingAndPosition();

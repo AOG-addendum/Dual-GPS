@@ -26,8 +26,6 @@ extern uint16_t labelGpsMessageHz;
 
 extern time_t RelPosNedMillis;
 extern time_t NavPvtMillis;
-extern bool NavPVTValid;
-extern bool RelPosNEDValid;
 
 extern double mphPwm;
 
@@ -184,6 +182,21 @@ struct NAV_RELPOSNED {
     uint8_t CK1;
 };
 extern NAV_RELPOSNED UBXRelPosNED[sizeOfUBXArray];
+
+///////////////////////////////////////////////////////////////////////////
+// Diagnostics
+///////////////////////////////////////////////////////////////////////////
+
+struct Diagnostics{
+    uint16_t badChecksumNavPVTCount;
+    uint16_t wrongLengthNavPVTCount;
+    uint16_t badChecksumRelPosNEDCount;
+    uint16_t wrongLengthRelPosNEDCount;
+};
+extern Diagnostics diagnostics;
+
+extern void loadDiagnostics();
+extern void saveDiagnostics();
 
 ///////////////////////////////////////////////////////////////////////////
 // Configuration
