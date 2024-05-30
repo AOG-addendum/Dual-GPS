@@ -1,6 +1,3 @@
-[submodule "lib/ESPUI"]
-	path = lib/ESPUI
-	https://github.com/AOG-addendum/ESPUI.git
 [submodule "tools/EspArduinoExceptionDecoder"]
 	path = tools/EspArduinoExceptionDecoder
 	url = https://github.com/me21/EspArduinoExceptionDecoder.git

@@ -280,7 +280,7 @@ struct GPS_Config {
 
   bool retainWifiSettings = true;
 };
-extern GPS_Config gpsConfig, gpsConfigDefaults;
+extern GPS_Config gpsConfig;
 
 struct Initialisation {
   uint16_t portSendFrom = 5544;

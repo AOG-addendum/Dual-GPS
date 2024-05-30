@@ -19,7 +19,7 @@ void diagnosticDisplay ( void* z ){
 
     Control* labelHeadingHandle = ESPUI.getControl( labelHeading );
     labelHeadingHandle->value = str;
-    ESPUI.updateControlAsync( labelHeadingHandle );
+    ESPUI.updateControl( labelHeadingHandle );
 
     bool power = digitalRead( gpsConfig.gpioDcPowerGood );
     if( power == LOW ) {
@@ -57,7 +57,7 @@ void diagnosticDisplay ( void* z ){
       labelGpsReceiversHandle->color = ControlColor::Turquoise;
     }
     labelGpsReceiversHandle->value = str;
-    ESPUI.updateControlAsync( labelGpsReceiversHandle );
+    ESPUI.updateControl( labelGpsReceiversHandle );
 
     str = "Pwm: ";
     str += mphPwm;
@@ -66,7 +66,7 @@ void diagnosticDisplay ( void* z ){
 
     Control* labelPwmOutHandle = ESPUI.getControl( labelPwmOut );
     labelPwmOutHandle->value = str;
-    ESPUI.updateControlAsync( labelPwmOutHandle );
+    ESPUI.updateControl( labelPwmOutHandle );
 
     str = "Max millis: ";
     str += gpsHzMaxMillis;
@@ -85,7 +85,7 @@ void diagnosticDisplay ( void* z ){
 
     Control* labelGpsMessageHzHandle = ESPUI.getControl( labelGpsMessageHz );
     labelGpsMessageHzHandle->value = str;
-    ESPUI.updateControlAsync( labelGpsMessageHzHandle );
+    ESPUI.updateControl( labelGpsMessageHzHandle );
 
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );
   }
