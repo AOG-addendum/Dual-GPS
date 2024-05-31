@@ -87,7 +87,7 @@ void diagnosticDisplay ( void* z ){
     labelGpsMessageHzHandle->value = str;
     ESPUI.updateControl( labelGpsMessageHzHandle );
 
-		vTaskDelayUntil( &xLastWakeTime, xFrequency );
+		xTaskDelayUntil( &xLastWakeTime, xFrequency );
   }
 }
 

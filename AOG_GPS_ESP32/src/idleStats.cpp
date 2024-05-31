@@ -75,7 +75,7 @@ void idleStatsWorker( void* z ) {
 
 //   heap_caps_print_heap_info(MALLOC_CAP_8BIT);
 
-    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    xTaskDelayUntil( &xLastWakeTime, xFrequency );
   }
 }
 

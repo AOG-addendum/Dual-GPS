@@ -12,7 +12,7 @@ void SpeedPWM ( void* z ){
     mphPwm = float( UBXPVT1[UBXRingCount1].gSpeed ) * gpsConfig.velocityHzPerMPH;
     mphPwm *= 0.0022369363; // 1 gSpeed = 0.0036 km/h = 0.0022369363 mile/h 
     ledcWriteTone( 0, mphPwm );
-		vTaskDelayUntil( &xLastWakeTime, xFrequency );
+		xTaskDelayUntil( &xLastWakeTime, xFrequency );
   }
 }
 
