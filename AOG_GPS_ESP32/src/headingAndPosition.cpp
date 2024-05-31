@@ -757,7 +757,7 @@ void headingAndPosition ( void* z ){
 				powerUnstable = false;
 		}
 
-		vTaskDelayUntil( &xLastWakeTime, xFrequency );
+		xTaskDelayUntil( &xLastWakeTime, xFrequency );
 	}
 }
 

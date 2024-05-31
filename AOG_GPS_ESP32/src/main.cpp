@@ -12,7 +12,9 @@
 #include <DNSServer.h>
 #include <ESPUI.h>
 
-#include <AsyncElegantOTA.h>
+#include <LittleFS.h>
+
+#include <ElegantOTA.h>
 
 ///////////////////////////////////////////////////////////////////////////
 // global data
@@ -33,7 +35,6 @@ IPAddress ipDestination( 192, 168, 1, 255 ); //IP address to send UDP data to
 ///////////////////////////////////////////////////////////////////////////
 // external Libraries
 ///////////////////////////////////////////////////////////////////////////
-ESPUIClass ESPUI( Verbosity::Quiet );
 DNSServer dnsServer;
 AsyncUDP udpRoof;
 SoftwareSerial NmeaTransmitter;
@@ -49,10 +50,12 @@ SoftwareSerial NmeaTransmitter;
 void setup( void ) {
   Serial.begin( 115200 );
 
+  ESPUI.setVerbosity(Verbosity::Quiet);
+
   WiFi.disconnect( true );
 
-  if( !SPIFFS.begin( true ) ) {
-    Serial.println( "SPIFFS Mount Failed" );
+  if( !LittleFS.begin( true ) ) {
+    Serial.println( "LittleFS Mount Failed" );
     return;
   }
 
@@ -99,7 +102,7 @@ void setup( void ) {
   initESPUI();
 
   if( gpsConfig.enableOTA ) {
-    AsyncElegantOTA.begin( ESPUI.server );
+    ElegantOTA.begin( ESPUI.server );
   }
 
   if ( udpRoof.listen( gpsConfig.aogPortSendFrom ))

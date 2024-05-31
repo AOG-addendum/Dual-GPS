@@ -2,9 +2,7 @@
 
 #include <memory>
 
-#include <FS.h>
-#include <SPIFFS.h>
-
+#include <LittleFS.h>
 
 #include "main.hpp"
 #include "jsonFunctions.hpp"
@@ -26,8 +24,8 @@ void saveConfig() {
 json loadJsonFromFile( const char* fileName ) {
   json j;
 
-  if( SPIFFS.exists( fileName ) ) {
-    File file = SPIFFS.open( fileName, "r" );
+  if( LittleFS.exists( fileName ) ) {
+    File file = LittleFS.open( fileName, "r" );
 
     if( file ) {
       std::vector<uint8_t> data;
@@ -39,6 +37,7 @@ json loadJsonFromFile( const char* fileName ) {
         j = json::parse( data/*, nullptr, false*/ );
       } catch( json::exception& e ) {
         // output exception information
+        Serial.print( " LOAD/PARSE FILE " );
         Serial.print( "message: " );
         Serial.println( e.what() );
         Serial.print( "exception id: " );
@@ -52,6 +51,10 @@ json loadJsonFromFile( const char* fileName ) {
 
     file.close();
   }
+  else {
+    Serial.print( fileName );
+    Serial.println( " does not exist" );
+  }
 
   return j;
 }
@@ -60,8 +63,14 @@ void saveJsonToFile( const json& json, const char* fileName ) {
   // pretty print with 2 spaces indentation
   auto data = json.dump( 2 );
 
-  File file = SPIFFS.open( fileName, "w" );
+  bool newfile = false;
 
+  if( !LittleFS.exists( fileName ) ) {
+    newfile = true;
+  }
+    
+  File file = LittleFS.open( fileName, "w", newfile );
+  
   if( file && !file.isDirectory() ) {
     file.write( ( uint8_t* )data.c_str(), data.size() );
   } else {
@@ -129,65 +138,70 @@ void parseJsonToGpsConfig( json& j, GPS_Config& config ) {
   if( j.is_object() ) {
     try {
       {
-        std::string str = j.value( "/wifi/ssid"_json_pointer, gpsConfigDefaults.ssid );
+        std::string str;
+        j["wifi"]["ssid"].get_to( str );
         memset( config.ssid, 0, sizeof( config.ssid ) );
         memcpy( config.ssid, str.c_str(), str.size() );
       }
       {
-        std::string str = j.value( "/wifi/password"_json_pointer, gpsConfigDefaults.password );
+        std::string str;
+        j["wifi"]["password"].get_to( str );
         memset( config.password, 0, sizeof( config.password ) );
         memcpy( config.password, str.c_str(), str.size() );
       }
       {
-        std::string str = j.value( "/wifi/hostname"_json_pointer, gpsConfigDefaults.hostname );
+        std::string str;
+        j["wifi"]["hostname"].get_to( str );
         memset( config.hostname, 0, sizeof( config.hostname ) );
         memcpy( config.hostname, str.c_str(), str.size() );
       }
-      config.retainWifiSettings = j.value( "/wifi/retainSettings"_json_pointer, gpsConfigDefaults.retainWifiSettings );
-      config.WifiLedOnLevel = j.value( "/wifi/WifiLedOnLevel"_json_pointer, gpsConfigDefaults.WifiLedOnLevel );
+      j["wifi"]["retainSettings"].get_to( gpsConfig.retainWifiSettings );
+      j["wifi"]["WifiLedOnLevel"].get_to( gpsConfig.WifiLedOnLevel );
+      
+      j["gps"]["AntennaDist"].get_to( gpsConfig.AntDist );
 
-      config.AntDist = j.value( "/gps/AntennaDist"_json_pointer, gpsConfigDefaults.AntDist );
-      config.AntHeight = j.value( "/gps/AntennaHeight"_json_pointer, gpsConfigDefaults.AntHeight );
-      config.virtAntRight = j.value( "/gps/virtualAntennaRight"_json_pointer, gpsConfigDefaults.virtAntRight );
-      config.virtAntForew = j.value( "/gps/virtualAntennaForeword"_json_pointer, gpsConfigDefaults.virtAntForew );
-      config.headingAngleCorrection = j.value( "/gps/headingAngleCorrection"_json_pointer, gpsConfigDefaults.headingAngleCorrection );
-      config.AntDistDeviationFactor = j.value( "/gps/AntDistanceDeviationFactor"_json_pointer, gpsConfigDefaults.AntDistDeviationFactor );
-      config.MaxHeadChangPerSec = j.value( "/gps/MaxHeadingChangePerSecond"_json_pointer, gpsConfigDefaults.MaxHeadChangPerSec );
-      config.checkUBXFlags = j.value( "/gps/checkUBXFlags"_json_pointer, gpsConfigDefaults.checkUBXFlags );
-      config.filterGPSposOnWeakSignal = j.value( "/gps/filterGPSpositionOnWeakSignal"_json_pointer, gpsConfigDefaults.filterGPSposOnWeakSignal );
-      config.GPSPosCorrByRoll = j.value( "/gps/GPSPositionCorrectionByRoll"_json_pointer, gpsConfigDefaults.GPSPosCorrByRoll );
-      config.rollAngleCorrection = j.value( "/gps/rollAngleCorrection"_json_pointer, gpsConfigDefaults.rollAngleCorrection );
+      j["gps"]["AntennaHeight"].get_to( gpsConfig.AntHeight );
+      j["gps"]["virtualAntennaRight"].get_to( gpsConfig.virtAntRight );
+      j["gps"]["virtualAntennaForeword"].get_to( gpsConfig.virtAntForew );
+      j["gps"]["headingAngleCorrection"].get_to( gpsConfig.headingAngleCorrection );
+      j["gps"]["AntennaDistanceDeviationFactor"].get_to( gpsConfig.AntDistDeviationFactor );
+      j["gps"]["MaxHeadingChangePerSecond"].get_to( gpsConfig.MaxHeadChangPerSec );
+      j["gps"]["checkUBXFlags"].get_to( gpsConfig.checkUBXFlags );
+      j["gps"]["filterGPSpositionOnWeakSignal"].get_to( gpsConfig.filterGPSposOnWeakSignal );
+      j["gps"]["GPSPositionCorrectionByRoll"].get_to( gpsConfig.GPSPosCorrByRoll );
+      j["gps"]["rollAngleCorrection"].get_to( gpsConfig.rollAngleCorrection );
 
-      config.sendSerialNmeaVTG = j.value( "/serialNmea/sendVTG"_json_pointer, gpsConfigDefaults.sendSerialNmeaVTG );
-      config.sendSerialNmeaGGA = j.value( "/serialNmea/sendGGA"_json_pointer, gpsConfigDefaults.sendSerialNmeaGGA );
-      config.sendSerialNmeaHDT = j.value( "/serialNmea/sendHDT"_json_pointer, gpsConfigDefaults.sendSerialNmeaHDT );
-      config.sendSerialNmeaRMC = j.value( "/serialNmea/sendRMC"_json_pointer, gpsConfigDefaults.sendSerialNmeaRMC );
-      config.serialNmeaBaudrate = j.value( "/serialNmea/serialNmeaBaudrate"_json_pointer, gpsConfigDefaults.serialNmeaBaudrate );
-      config.serialNmeaMessagesPerSec = j.value( "/serialNmea/serialNmeaMessagesPerSecond"_json_pointer, gpsConfigDefaults.serialNmeaMessagesPerSec );
+      j["serialNmea"]["sendVTG"].get_to( gpsConfig.sendSerialNmeaVTG );
+      j["serialNmea"]["sendGGA"].get_to( gpsConfig.sendSerialNmeaGGA );
+      j["serialNmea"]["sendHDT"].get_to( gpsConfig.sendSerialNmeaHDT );
+      j["serialNmea"]["sendRMC"].get_to( gpsConfig.sendSerialNmeaRMC );
+      j["serialNmea"]["serialNmeaBaudrate"].get_to( gpsConfig.serialNmeaBaudrate );
+      j["serialNmea"]["serialNmeaMessagesPerSecond"].get_to( gpsConfig.serialNmeaMessagesPerSec );
 
-      config.sendOGI = j.value( "/messages/sendOGI"_json_pointer, gpsConfigDefaults.sendOGI );
-      config.sendVTG = j.value( "/messages/sendVTG"_json_pointer, gpsConfigDefaults.sendVTG );
-      config.sendGGA = j.value( "/messages/sendGGA"_json_pointer, gpsConfigDefaults.sendGGA );
-      config.sendHDT = j.value( "/messages/sendHDT"_json_pointer, gpsConfigDefaults.sendHDT );
+      j["messages"]["sendOGI"].get_to( gpsConfig.sendOGI );
+      j["messages"]["sendVTG"].get_to( gpsConfig.sendVTG );
+      j["messages"]["sendGGA"].get_to( gpsConfig.sendGGA );
+      j["messages"]["sendHDT"].get_to( gpsConfig.sendHDT );
 
-      config.velocityHzPerMPH = j.value( "/PWM/velocityHzPerMPH"_json_pointer, gpsConfigDefaults.velocityHzPerMPH );
+      j["PWM"]["velocityHzPerMPH"].get_to( gpsConfig.velocityHzPerMPH );
 
-      config.debugmode = j.value( "/debug/debugmode"_json_pointer, gpsConfigDefaults.debugmode );
-      config.debugmodeUBX = j.value( "/debug/debugmodeUBX"_json_pointer, gpsConfigDefaults.debugmodeUBX );
-      config.debugmodeHeading = j.value( "/debug/debugmodeHeading"_json_pointer, gpsConfigDefaults.debugmodeHeading );
-      config.debugmodeVirtAnt = j.value( "/debug/debugmodeVirtualAntenna"_json_pointer, gpsConfigDefaults.debugmodeVirtAnt );
-      config.debugmodeFilterPos = j.value( "/debug/debugmodeFilterPosition"_json_pointer, gpsConfigDefaults.debugmodeFilterPos );
-      config.debugmodeRAW = j.value( "/debug/debugmodeRAW"_json_pointer, gpsConfigDefaults.debugmodeRAW );
+      j["debug"]["debugmode"].get_to( gpsConfig.debugmode );
+      j["debug"]["debugmodeUBX"].get_to( gpsConfig.debugmodeUBX );
+      j["debug"]["debugmodeHeading"].get_to( gpsConfig.debugmodeHeading );
+      j["debug"]["debugmodeVirtualAntenna"].get_to( gpsConfig.debugmodeVirtAnt );
+      j["debug"]["debugmodeFilterPosition"].get_to( gpsConfig.debugmodeFilterPos );
+      j["debug"]["debugmodeRAW"].get_to( gpsConfig.debugmodeRAW );
 
-      config.baudrate = j.value( "/connection/baudrate"_json_pointer, gpsConfigDefaults.baudrate );
-      config.enableOTA = j.value( "/connection/enableOTA"_json_pointer, gpsConfigDefaults.enableOTA );
+      j["connection"]["baudrate"].get_to( gpsConfig.baudrate );
+      j["connection"]["enableOTA"].get_to( gpsConfig.enableOTA );
 
-      config.aogPortSendFrom = j.value( "/connection/aog/sendFrom"_json_pointer, gpsConfigDefaults.aogPortSendFrom );
-      config.aogPortListenTo = j.value( "/connection/aog/listenTo"_json_pointer, gpsConfigDefaults.aogPortListenTo );
-      config.aogPortSendTo = j.value( "/connection/aog/sendTo"_json_pointer, gpsConfigDefaults.aogPortSendTo );
+      j["connection"]["aog"]["sendFrom"].get_to( gpsConfig.aogPortSendFrom );
+      j["connection"]["aog"]["listenTo"].get_to( gpsConfig.aogPortListenTo );
+      j["connection"]["aog"]["sendTo"].get_to( gpsConfig.aogPortSendTo );
 
     } catch( json::exception& e ) {
       // output exception information
+      Serial.print( " PARSE TO CONFIG " );
       Serial.print( "message: " );
       Serial.println( e.what() );
       Serial.print( "exception id: " );
@@ -225,14 +239,14 @@ json parseDiagnosticsToJson( const Diagnostics& diagnostics ) {
 void parseJsonToDiagnostics( json& j, Diagnostics& diagnostics ) {
   if( j.is_object() ) {
     try {
-   
-      diagnostics.badChecksumNavPVTCount = j.value( "/count/badChecksumNavPVT"_json_pointer, 0 );
-      diagnostics.wrongLengthNavPVTCount = j.value( "/count/wrongLengthNavPVT"_json_pointer, 0 );
-      diagnostics.badChecksumRelPosNEDCount = j.value( "/count/badChecksumRelPosNED"_json_pointer, 0 );
-      diagnostics.wrongLengthRelPosNEDCount = j.value( "/count/wrongLengthRelPosNED"_json_pointer, 0 );
+      j["count"]["badChecksumNavPVT"].get_to( diagnostics.badChecksumNavPVTCount );
+      j["count"]["wrongLengthNavPVT"].get_to( diagnostics.wrongLengthNavPVTCount );
+      j["count"]["badChecksumRelPosNED"].get_to( diagnostics.badChecksumRelPosNEDCount );
+      j["count"]["wrongLengthRelPosNED"].get_to( diagnostics.wrongLengthRelPosNEDCount );
 
     } catch( json::exception& e ) {
       // output exception information
+      Serial.print( " PARSE TO DIAGNOSTICS " );
       Serial.print( "message: " );
       Serial.println( e.what() );
       Serial.print( "exception id: " );
