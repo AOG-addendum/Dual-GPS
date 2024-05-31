@@ -13,11 +13,11 @@ uint16_t labelHeading;
 uint16_t labelGpsReceivers;
 uint16_t labelPwmOut;
 uint16_t labelGpsMessageHz;
-uint16_t buttonReset;
+uint16_t buttonApply;
+uint16_t buttonApplyReset;
 
 void setResetButtonToRed() {
-  ESPUI.getControl( buttonReset )->color = ControlColor::Alizarin;
-  ESPUI.updateControl( buttonReset );
+  ESPUI.setPanelStyle (buttonApplyReset, "background-color: #e32636" ); //#e32636 == ControlColor::Alizarin
 }
 
 void initESPUI ( void ) {
@@ -25,14 +25,14 @@ void initESPUI ( void ) {
   labelLoad = ESPUI.addControl( ControlType::Label, "Load", "", ControlColor::Turquoise );
   labelHeading = ESPUI.addControl( ControlType::Label, "Heading values", "", ControlColor::Sunflower );
 
-  buttonReset = ESPUI.addControl( ControlType::Button, "Store the Settings", "Apply", ControlColor::Sunflower, Control::noParent,
+  buttonApply = ESPUI.addControl( ControlType::Button, "Store the Settings", "Apply", ControlColor::Sunflower, Control::noParent,
   []( Control * control, int id ) {
     if( id == B_UP ) {
       saveConfig();
     }
   } );
 
-  buttonReset = ESPUI.addControl( ControlType::Button, "If this turns red, you have to", "Apply & Reboot", ControlColor::Sunflower, Control::noParent,
+  buttonApplyReset = ESPUI.addControl( ControlType::Button, "If this turns red, you have to", "Apply & Reboot", ControlColor::Sunflower, Control::noParent,
   []( Control * control, int id ) {
     if( id == B_UP ) {
       saveConfig();
@@ -45,7 +45,7 @@ void initESPUI ( void ) {
 
   // Status Tab
   {
-    uint16_t tab = ESPUI.addControl( ControlType::Tab, "Status", "Status" );
+    auto  tab = ESPUI.addControl( ControlType::Tab, "Status", "Status" );
     String buildDate = String( __DATE__ );
     buildDate += String( " " );
     buildDate += String( __TIME__ );
@@ -69,7 +69,7 @@ void initESPUI ( void ) {
 
   // Network Tab
   {
-    uint16_t tab = ESPUI.addControl( ControlType::Tab, "Network", "Network" );
+    auto  tab = ESPUI.addControl( ControlType::Tab, "Network", "Network" );
 
     ESPUI.addControl( ControlType::Text, "SSID*", String( gpsConfig.ssid ), ControlColor::Wetasphalt, tab,
     []( Control * control, int id ) {
@@ -109,7 +109,7 @@ void initESPUI ( void ) {
       setResetButtonToRed();
     } );
     {
-      uint16_t sel = ESPUI.addControl( ControlType::Select, "Wifi Led*", String( gpsConfig.WifiLedOnLevel ), ControlColor::Wetasphalt, tab,
+      auto  sel = ESPUI.addControl( ControlType::Select, "Wifi Led*", String( gpsConfig.WifiLedOnLevel ), ControlColor::Wetasphalt, tab,
       []( Control * control, int id ) {
         gpsConfig.WifiLedOnLevel = control->value.toInt();
         setResetButtonToRed();
@@ -121,10 +121,10 @@ void initESPUI ( void ) {
 
   // GPS Tab
   {
-    uint16_t tab = ESPUI.addControl( ControlType::Tab, "GPS", "GPS" );
+    auto  tab = ESPUI.addControl( ControlType::Tab, "GPS", "GPS" );
 
     {
-      uint16_t num = ESPUI.addControl( ControlType::Number, "Distance between Dual GPS Antennas", String( gpsConfig.AntDist ), ControlColor::Peterriver, tab,
+      auto  num = ESPUI.addControl( ControlType::Number, "Distance between Dual GPS Antennas", String( gpsConfig.AntDist ), ControlColor::Peterriver, tab,
       []( Control * control, int id ) {
         gpsConfig.AntDist = control->value.toFloat();
       } );
@@ -134,7 +134,7 @@ void initESPUI ( void ) {
     }
 
     {
-      uint16_t num = ESPUI.addControl( ControlType::Number, "GPS Antenna Height", String( gpsConfig.AntHeight ), ControlColor::Peterriver, tab,
+      auto  num = ESPUI.addControl( ControlType::Number, "GPS Antenna Height", String( gpsConfig.AntHeight ), ControlColor::Peterriver, tab,
       []( Control * control, int id ) {
         gpsConfig.AntHeight = control->value.toFloat();
       } );
@@ -144,7 +144,7 @@ void initESPUI ( void ) {
     }
 
     {
-      uint16_t num = ESPUI.addControl( ControlType::Number, "GPS Antenna right offset", String( gpsConfig.virtAntRight ), ControlColor::Peterriver, tab,
+      auto  num = ESPUI.addControl( ControlType::Number, "GPS Antenna right offset", String( gpsConfig.virtAntRight ), ControlColor::Peterriver, tab,
       []( Control * control, int id ) {
         gpsConfig.virtAntRight = control->value.toFloat();
       } );
@@ -154,7 +154,7 @@ void initESPUI ( void ) {
     }
 
     {
-      uint16_t num = ESPUI.addControl( ControlType::Number, "GPS Antenna foreward offset", String( gpsConfig.virtAntForew ), ControlColor::Peterriver, tab,
+      auto  num = ESPUI.addControl( ControlType::Number, "GPS Antenna foreward offset", String( gpsConfig.virtAntForew ), ControlColor::Peterriver, tab,
       []( Control * control, int id ) {
         gpsConfig.virtAntForew = control->value.toFloat();
       } );
@@ -164,7 +164,7 @@ void initESPUI ( void ) {
     }
 
     {
-      uint16_t num = ESPUI.addControl( ControlType::Number, "Heading angle correction\n(90 for left/right antenna)", String( gpsConfig.headingAngleCorrection ), ControlColor::Peterriver, tab,
+      auto  num = ESPUI.addControl( ControlType::Number, "Heading angle correction\n(90 for left/right antenna)", String( gpsConfig.headingAngleCorrection ), ControlColor::Peterriver, tab,
       []( Control * control, int id ) {
         gpsConfig.headingAngleCorrection = control->value.toFloat();
       } );
@@ -174,7 +174,7 @@ void initESPUI ( void ) {
     }
 
     {
-      uint16_t num = ESPUI.addControl( ControlType::Number, "Distance between Antennas max Deviation", String( gpsConfig.AntDistDeviationFactor ), ControlColor::Peterriver, tab,
+      auto  num = ESPUI.addControl( ControlType::Number, "Distance between Antennas max Deviation", String( gpsConfig.AntDistDeviationFactor ), ControlColor::Peterriver, tab,
       []( Control * control, int id ) {
         gpsConfig.AntDistDeviationFactor = control->value.toFloat();
       } );
@@ -184,7 +184,7 @@ void initESPUI ( void ) {
     }
 
     {
-      uint16_t num = ESPUI.addControl( ControlType::Number, "Max heading change (Degrees/Second)", String( gpsConfig.MaxHeadChangPerSec ), ControlColor::Peterriver, tab,
+      auto  num = ESPUI.addControl( ControlType::Number, "Max heading change (Degrees/Second)", String( gpsConfig.MaxHeadChangPerSec ), ControlColor::Peterriver, tab,
       []( Control * control, int id ) {
         gpsConfig.MaxHeadChangPerSec = control->value.toFloat();
       } );
@@ -209,7 +209,7 @@ void initESPUI ( void ) {
 
   // AOG Messages Tab
   {
-    uint16_t tab = ESPUI.addControl( ControlType::Tab, "AOG Messages", "AOG Messages" );
+    auto  tab = ESPUI.addControl( ControlType::Tab, "AOG Messages", "AOG Messages" );
 
     ESPUI.addControl( ControlType::Switcher, "Send $PAOGI", gpsConfig.sendOGI ? "1" : "0", ControlColor::Peterriver, tab,
     []( Control * control, int id ) {
@@ -231,7 +231,7 @@ void initESPUI ( void ) {
 
   // Serial NMEA out Tab
   {
-    uint16_t tab = ESPUI.addControl( ControlType::Tab, "Serial NMEA out", "Serial NMEA out" );
+    auto  tab = ESPUI.addControl( ControlType::Tab, "Serial NMEA out", "Serial NMEA out" );
 
     ESPUI.addControl( ControlType::Switcher, "Send $VTG", gpsConfig.sendSerialNmeaVTG ? "1" : "0", ControlColor::Peterriver, tab,
     []( Control * control, int id ) {
@@ -251,7 +251,7 @@ void initESPUI ( void ) {
     } );
 
     {
-      uint16_t baudrate = ESPUI.addControl( ControlType::Select, "Serial NMEA Baudrate*", String( gpsConfig.serialNmeaBaudrate ), ControlColor::Wetasphalt, tab,
+      auto  baudrate = ESPUI.addControl( ControlType::Select, "Serial NMEA Baudrate*", String( gpsConfig.serialNmeaBaudrate ), ControlColor::Wetasphalt, tab,
       []( Control * control, int id ) {
         gpsConfig.serialNmeaBaudrate = control->value.toInt();
         setResetButtonToRed();
@@ -264,7 +264,7 @@ void initESPUI ( void ) {
       ESPUI.addControl( ControlType::Option, "115200", "115200", ControlColor::Alizarin, baudrate );
     }
     {
-      uint16_t num = ESPUI.addControl( ControlType::Number, "NMEA Messages per Second*", String( gpsConfig.serialNmeaMessagesPerSec ), ControlColor::Wetasphalt, tab,
+      auto  num = ESPUI.addControl( ControlType::Number, "NMEA Messages per Second*", String( gpsConfig.serialNmeaMessagesPerSec ), ControlColor::Wetasphalt, tab,
       []( Control * control, int id ) {
         gpsConfig.serialNmeaMessagesPerSec = control->value.toInt();
         setResetButtonToRed();
@@ -277,10 +277,10 @@ void initESPUI ( void ) {
 
   // Velocity PWM Tab
   {
-    uint16_t tab = ESPUI.addControl( ControlType::Tab, "Velocity PWM out", "Velocity PWM out" );
+    auto  tab = ESPUI.addControl( ControlType::Tab, "Velocity PWM out", "Velocity PWM out" );
 
     {
-      uint16_t num = ESPUI.addControl( ControlType::Number, "Hertz / Mile Per Hour", String( gpsConfig.velocityHzPerMPH ), ControlColor::Peterriver, tab,
+      auto  num = ESPUI.addControl( ControlType::Number, "Hertz / Mile Per Hour", String( gpsConfig.velocityHzPerMPH ), ControlColor::Peterriver, tab,
       []( Control * control, int id ) {
         gpsConfig.velocityHzPerMPH = control->value.toInt();
       } );
@@ -292,7 +292,7 @@ void initESPUI ( void ) {
 
   // Serial debug Tab
   {
-    uint16_t tab = ESPUI.addControl( ControlType::Tab, "USB Serial debug", "USB Serial debug" );
+    auto  tab = ESPUI.addControl( ControlType::Tab, "USB Serial debug", "USB Serial debug" );
 
     ESPUI.addControl( ControlType::Switcher, "Debug Mode", gpsConfig.debugmode ? "1" : "0", ControlColor::Peterriver, tab,
     []( Control * control, int id ) {
@@ -322,7 +322,7 @@ void initESPUI ( void ) {
 
   // Default Configurations Tab
   {
-    uint16_t tab = ESPUI.addControl( ControlType::Tab, "Configurations", "Configurations" );
+    auto  tab = ESPUI.addControl( ControlType::Tab, "Configurations", "Configurations" );
 
     ESPUI.addControl( ControlType::Label, "OTA Update:", "<a href='/update'>Update</a>", ControlColor::Carrot, tab );
 

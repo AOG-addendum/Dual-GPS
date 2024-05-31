@@ -1,4 +1,3 @@
-
 #include "main.hpp"
 
 void diagnosticDisplay ( void* z ){
@@ -16,10 +15,7 @@ void diagnosticDisplay ( void* z ){
     str += HeadingVTG;
     str += "\nHeading from Mix: ";
     str += HeadingMix;
-
-    Control* labelHeadingHandle = ESPUI.getControl( labelHeading );
-    labelHeadingHandle->value = str;
-    ESPUI.updateControl( labelHeadingHandle );
+    ESPUI.updateText( labelHeading, String( str ) );
 
     bool power = digitalRead( gpsConfig.gpioDcPowerGood );
     if( power == LOW ) {
@@ -50,24 +46,20 @@ void diagnosticDisplay ( void* z ){
       str += " millis ago";
     }
 
-    Control* labelGpsReceiversHandle = ESPUI.getControl( labelGpsReceivers );
     if( power == LOW or powerUnstable == true or NAV_millis_elapsed > 150 or RPN_millis_elapsed > 150 ){
-      labelGpsReceiversHandle->color = ControlColor::Alizarin;
+      ESPUI.setPanelStyle ( labelGpsReceivers, "background-color: #e32636" ); //#e32636 == ControlColor::Alizarin
     } else {
-      labelGpsReceiversHandle->color = ControlColor::Turquoise;
+      ESPUI.setPanelStyle ( labelGpsReceivers, "background-color: #40e0d0" ); //#40e0d0 == Turquoise
     }
-    labelGpsReceiversHandle->value = str;
-    ESPUI.updateControl( labelGpsReceiversHandle );
+    ESPUI.updateText( labelGpsReceivers, String( str ) );
 
     str = "Pwm: ";
     str += mphPwm;
     str += "Hz\ngSpeed: ";
     str += UBXPVT1[UBXRingCount1].gSpeed;
+    ESPUI.updateText( labelPwmOut, String( str ) );
 
-    Control* labelPwmOutHandle = ESPUI.getControl( labelPwmOut );
-    labelPwmOutHandle->value = str;
-    ESPUI.updateControl( labelPwmOutHandle );
-
+  
     str = "Max millis: ";
     str += gpsHzMaxMillis;
     str += "\nMin millis: ";
@@ -82,14 +74,13 @@ void diagnosticDisplay ( void* z ){
     str += diagnostics.badChecksumRelPosNEDCount;
     str += "\nRelPosNED wrong length: ";
     str += diagnostics.wrongLengthRelPosNEDCount;
-
-    Control* labelGpsMessageHzHandle = ESPUI.getControl( labelGpsMessageHz );
-    labelGpsMessageHzHandle->value = str;
-    ESPUI.updateControl( labelGpsMessageHzHandle );
+    ESPUI.updateText( labelGpsMessageHz, String( str ) );
 
 		xTaskDelayUntil( &xLastWakeTime, xFrequency );
   }
 }
+
+
 
 void initDiagnosticDisplay() {
   xTaskCreate( diagnosticDisplay, "diagnosticDisplay", 2048, NULL, 2, NULL );

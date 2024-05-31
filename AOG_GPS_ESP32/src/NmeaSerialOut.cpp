@@ -30,7 +30,7 @@ void NmeaOut ( void* z ){
         NmeaTransmitter.write( RMCReceiveBuffer, 80 );
       }
     }
-    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    xTaskDelayUntil( &xLastWakeTime, xFrequency );
   }
 }
 

@@ -63,15 +63,11 @@ void idleStatsWorker( void* z ) {
     str += "kB<br/>Largest free block on Heap: ";
     str += heapInfo.largest_free_block / 1024;
     str += "kB";
-
-    Control* labelLoadHandle = ESPUI.getControl( labelLoad );
-    labelLoadHandle->value = str;
-    ESPUI.updateControl( labelLoadHandle );
+    ESPUI.updateText( labelLoad, String( str ) );
+    
 
     idleCtrCore0 = 0;
     idleCtrCore1 = 0;
-
-    //ESPUI.updateControlAsyncTransmit();
 
 //   heap_caps_print_heap_info(MALLOC_CAP_8BIT);
 

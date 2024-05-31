@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <string.h>
 
@@ -50,7 +48,7 @@ SoftwareSerial NmeaTransmitter;
 void setup( void ) {
   Serial.begin( 115200 );
 
-  ESPUI.setVerbosity(Verbosity::Quiet);
+  ESPUI.setVerbosity( Verbosity::Verbose ); //Quiet // VerboseJSON // Verbose
 
   WiFi.disconnect( true );
 
@@ -62,14 +60,14 @@ void setup( void ) {
   loadSavedConfig();
 
   Serial1.begin( 115200, SERIAL_8N1, gpsConfig.gpioGpsRX1, gpsConfig.gpioGpsTX1 );
-  delay( 10);
+  delay( 10 );
   Serial2.begin( 115200, SERIAL_8N1, gpsConfig.gpioGpsRX2, gpsConfig.gpioGpsTX2 );
 
   Serial.updateBaudRate( gpsConfig.baudrate );
   Serial.println( "Welcome to ESP32 Dual GPS.\nTo configure, please open the WebUI." );
 
   NmeaTransmitter.begin( gpsConfig.serialNmeaBaudrate, SWSERIAL_8N1, -1, gpsConfig.gpioSerialNmea );
-  NmeaTransmitter.enableIntTx(false);
+  NmeaTransmitter.enableIntTx( false );
   nmeaMessageDelay = 1000 / gpsConfig.serialNmeaMessagesPerSec;
 
   pinMode( gpsConfig.gpioWifiLed, OUTPUT );

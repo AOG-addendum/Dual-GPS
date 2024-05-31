@@ -53,7 +53,13 @@ json loadJsonFromFile( const char* fileName ) {
   }
   else {
     Serial.print( fileName );
-    Serial.println( " does not exist" );
+    Serial.println( " does not exist, will be created now!" );
+    if( fileName == "/config.json" ){
+      saveJsonToFile( j, "/config.json" );
+    }
+    if( fileName == "/diagnostics.json" ){
+      saveJsonToFile( j, "/diagnostics.json" );
+    }
   }
 
   return j;
@@ -67,6 +73,8 @@ void saveJsonToFile( const json& json, const char* fileName ) {
 
   if( !LittleFS.exists( fileName ) ) {
     newfile = true;
+    Serial.print( fileName );
+    Serial.print( " file does not exist for writing " );
   }
     
   File file = LittleFS.open( fileName, "w", newfile );
@@ -222,6 +230,7 @@ void saveDiagnostics() {
   {
     const auto j = parseDiagnosticsToJson( diagnostics );
     saveJsonToFile( j, "/diagnostics.json" );
+    
   }
 }
 
