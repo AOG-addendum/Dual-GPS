@@ -1,3 +1,0 @@
-[submodule "tools/EspArduinoExceptionDecoder"]
-	path = tools/EspArduinoExceptionDecoder
-	url = https://github.com/me-no-dev/EspExceptionDecoder

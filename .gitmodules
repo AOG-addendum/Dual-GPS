@@ -1,3 +1,3 @@
-[submodule "AOG_GPS_ESP32/lib/ESPUI"]
-	path = AOG_GPS_ESP32/lib/ESPUI
-	url = https://github.com/AOG-addendum/ESPUI
+[submodule "AOG_GPS_ESP32/tools/EspExceptionDecoder"]
+	path = AOG_GPS_ESP32/tools/EspExceptionDecoder
+	url = https://github.com/me-no-dev/EspExceptionDecoder.git
