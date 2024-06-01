@@ -49,7 +49,7 @@ void diagnosticDisplay ( void* z ){
     if( power == LOW or powerUnstable == true or NAV_millis_elapsed > 150 or RPN_millis_elapsed > 150 ){
       ESPUI.setPanelStyle ( labelGpsReceivers, "background-color: #e32636" ); //#e32636 == ControlColor::Alizarin
     } else {
-      ESPUI.setPanelStyle ( labelGpsReceivers, "background-color: #40e0d0" ); //#40e0d0 == Turquoise
+      ESPUI.setPanelStyle ( labelGpsReceivers, "background-color: #40e0d0" ); //#40e0d0 == ControlColor::Turquoise
     }
     ESPUI.updateText( labelGpsReceivers, String( str ) );
 
