@@ -26,6 +26,8 @@ extern uint16_t labelGpsMessageHz;
 
 extern time_t RelPosNedMillis;
 extern time_t NavPvtMillis;
+extern time_t previousRelPosNedMillis;
+extern time_t previousNavPvtMillis;
 
 extern double mphPwm;
 

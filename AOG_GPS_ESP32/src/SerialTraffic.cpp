@@ -4,6 +4,8 @@
 
 time_t RelPosNedMillis;
 time_t NavPvtMillis;
+time_t previousRelPosNedMillis;
+time_t previousNavPvtMillis;
 
 void getUBX() {
 	bool checksumOk1 = false, checksumOk2 = false;
@@ -32,7 +34,6 @@ void getUBX() {
 		else {
 			//add incoming Byte to UBX
 			((unsigned char*)(&UBXRelPosNED[nextUBXcount2]))[UBXDigit2 - 2] = incomByte2;
-			RelPosNedMillis = millis();
 			UBXDigit2++;
 			//if (gpsConfig.debugmodeUBX) { Serial.print(incomByte2); Serial.print(": incoming byte number: "); Serial.println(UBXDigit2); }
 
@@ -110,6 +111,7 @@ void getUBX() {
 									Serial.print(UBXRelPosNED[UBXRingCount2].flags); Serial.print(",");
 								}
 							}
+							previousRelPosNedMillis = RelPosNedMillis;
 							RelPosNedMillis = millis();
 							UBXDigit2 = 0;
 							UBXLength2 = 100;
@@ -180,7 +182,6 @@ void getUBX() {
 		else {
 			//add incoming Byte to UBX
 			((unsigned char*)(&UBXPVT1[nextUBXcount1]))[UBXDigit1 - 2] = incomByte1;
-			NavPvtMillis = millis();
 			UBXDigit1++;
 			//if (gpsConfig.debugmodeUBX) { Serial.print(incomByte1); Serial.print(": incoming byte number: "); Serial.println(UBXDigit1); }
 
@@ -243,6 +244,7 @@ void getUBX() {
 								Serial.print("got UBX1 PVT lat: "); Serial.print(UBXPVT1[nextUBXcount1].lat);
 								Serial.print(" lon: "); Serial.println(UBXPVT1[nextUBXcount1].lon);
 							}
+							previousNavPvtMillis = NavPvtMillis;
 							NavPvtMillis = millis();
 						}
 						else { 

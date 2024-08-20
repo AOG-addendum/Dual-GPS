@@ -32,26 +32,26 @@ void diagnosticDisplay ( void* z ){
       str = "DC power good: running";
     }
     str += "\nNAV-PVT message received: ";
-    time_t NAV_millis_elapsed = millis() - NavPvtMillis;
-    if( NAV_millis_elapsed > 1000 ){
-      str += ( NAV_millis_elapsed / 1000 );
+    time_t elapsedNavPvtMillis = millis() - NavPvtMillis;
+    if( elapsedNavPvtMillis > 1000 ){
+      str += ( elapsedNavPvtMillis / 1000 );
       str += " seconds ago";
     } else {
-      str += NAV_millis_elapsed;
-      str += " millis ago";
+      str += NavPvtMillis - previousNavPvtMillis;
+      str += " millis apart";
     }
     str += "\nRelPosNED message received: ";
-    time_t RPN_millis_elapsed = millis() - RelPosNedMillis;
-    if( RPN_millis_elapsed > 1000 ){
-      str += ( RPN_millis_elapsed / 1000 );
+    time_t elapsedRelPosNedMillis = millis() - RelPosNedMillis;
+    if( elapsedRelPosNedMillis > 1000 ){
+      str += ( elapsedRelPosNedMillis / 1000 );
       str += " seconds ago";
     } else {
-      str += RPN_millis_elapsed;
-      str += " millis ago";
+      str += RelPosNedMillis - previousRelPosNedMillis;
+      str += " millis apart";
     }
 
     Control* labelGpsReceiversHandle = ESPUI.getControl( labelGpsReceivers );
-    if( power == LOW or powerUnstable == true or NAV_millis_elapsed > 150 or RPN_millis_elapsed > 150 ){
+    if( power == LOW or powerUnstable == true or elapsedNavPvtMillis > 1000 or elapsedRelPosNedMillis > 1000 ){
       labelGpsReceiversHandle->color = ControlColor::Alizarin;
     } else {
       labelGpsReceiversHandle->color = ControlColor::Turquoise;
