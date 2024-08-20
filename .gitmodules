@@ -1,3 +1,0 @@
-[submodule "AOG_GPS_ESP32/lib/ESPUI"]
-	path = AOG_GPS_ESP32/lib/ESPUI
-	url = https://github.com/AOG-addendum/ESPUI
