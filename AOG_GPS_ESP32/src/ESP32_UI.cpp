@@ -34,7 +34,7 @@ void initESPUI ( void ) {
   []( Control * control, int id ) {
     if( id == B_UP ) {
       saveConfig();
-      SPIFFS.end();
+      LittleFS.end();
       ESP.restart();
     }
   } );
@@ -340,7 +340,7 @@ void initESPUI ( void ) {
   ESPUI.begin( title.c_str() );
 
   ESPUI.server->on( "/config.json", HTTP_GET, []( AsyncWebServerRequest * request ) {
-    request->send( SPIFFS, "/config.json", "application/json", true );
+    request->send( LittleFS, "/config.json", "application/json", true );
   } );
   
   // upload a file to /upload-config
@@ -348,7 +348,7 @@ void initESPUI ( void ) {
     request->send( 200 );
   }, [tabConfigurations]( AsyncWebServerRequest * request, String filename, size_t index, uint8_t* data, size_t len, bool final ) {
     if( !index ) {
-      request->_tempFile = SPIFFS.open( "/config.json", "w" );
+      request->_tempFile = LittleFS.open( "/config.json", "w" );
     }
 
     if( request->_tempFile ) {
@@ -359,6 +359,7 @@ void initESPUI ( void ) {
       if( final ) {
         request->_tempFile.close();
         delay(10);
+        LittleFS.end();
         ESP.restart();
       }
     }

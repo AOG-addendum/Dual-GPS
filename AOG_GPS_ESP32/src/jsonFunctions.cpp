@@ -3,7 +3,7 @@
 #include <memory>
 
 #include <FS.h>
-#include <SPIFFS.h>
+#include <LittleFS.h>
 
 
 #include "main.hpp"
@@ -26,8 +26,8 @@ void saveConfig() {
 json loadJsonFromFile( const char* fileName ) {
   json j;
 
-  if( SPIFFS.exists( fileName ) ) {
-    File file = SPIFFS.open( fileName, "r" );
+  if( LittleFS.exists( fileName ) ) {
+    File file = LittleFS.open( fileName, "r" );
 
     if( file ) {
       std::vector<uint8_t> data;
@@ -60,7 +60,7 @@ void saveJsonToFile( const json& json, const char* fileName ) {
   // pretty print with 2 spaces indentation
   auto data = json.dump( 2 );
 
-  File file = SPIFFS.open( fileName, "w" );
+  File file = LittleFS.open( fileName, "w" );
 
   if( file && !file.isDirectory() ) {
     file.write( ( uint8_t* )data.c_str(), data.size() );

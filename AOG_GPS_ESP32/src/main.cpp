@@ -51,8 +51,8 @@ void setup( void ) {
 
   WiFi.disconnect( true );
 
-  if( !SPIFFS.begin( true ) ) {
-    Serial.println( "SPIFFS Mount Failed" );
+  if( !LittleFS.begin( true ) ) {
+    Serial.println( "LittleFS Mount Failed" );
     return;
   }
 
