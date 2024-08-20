@@ -2,7 +2,7 @@
 #include "main.hpp"
 
 void diagnosticDisplay ( void* z ){
-  constexpr TickType_t xFrequency = 100;
+  constexpr TickType_t xFrequency = 1000;
   TickType_t xLastWakeTime = xTaskGetTickCount();
 
   String str;
@@ -31,6 +31,10 @@ void diagnosticDisplay ( void* z ){
     } else if( power == HIGH ){
       str = "DC power good: running";
     }
+    str += "\nGPS: ";
+    str += existsUBXRelPosNED ? "Dual" : "Single" ;
+    str += "\nAntenna dist. deviation: ";
+    str += antDistDeviation;
     str += "\nNAV-PVT message received: ";
     time_t elapsedNavPvtMillis = millis() - NavPvtMillis;
     if( elapsedNavPvtMillis > 1000 ){

@@ -68,6 +68,7 @@ uint8_t noRollCount = 0,  drivDirect = 0;
 bool dualGPSHeadingPresent = false, rollPresent = false, virtAntPosPresent = false, add360ToRelPosNED = false, add360ToVTG = false;
 double roll = 0.0, rollToAOG = 0.0;
 uint8_t dualAntNoValueCount = 0, dualAntNoValueMax = 20;// if dual Ant value not valid for xx times, send position without correction/heading/roll
+int16_t antDistDeviation;
 
 NAV_PVT UBXPVT1[sizeOfUBXArray];
 NAV_RELPOSNED UBXRelPosNED[sizeOfUBXArray];
@@ -97,6 +98,7 @@ void headingRollCalc( ){
 			if( bitRead( UBXRelPosNED[UBXRingCount2].flags, 2 ) || ( gpsConfig.checkUBXFlags == 0 )){//1 if relative position components and moving baseline are valid
 			//RelPosNED OK: heading + roll calc												 
 
+				antDistDeviation = UBXRelPosNED[UBXRingCount2].relPosLength - gpsConfig.AntDist;
 				if(( UBXRelPosNED[UBXRingCount2].relPosLength > ( gpsConfig.AntDist / gpsConfig.AntDistDeviationFactor )) && ( UBXRelPosNED[UBXRingCount2].relPosLength < ( gpsConfig.AntDist * gpsConfig.AntDistDeviationFactor )))
 				{
 					//check if vector length between antennas is in range = indicator of heading/roll quality

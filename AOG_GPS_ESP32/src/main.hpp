@@ -88,6 +88,7 @@ constexpr double PI180 = PI / 180;
 extern bool dualGPSHeadingPresent, rollPresent, virtAntPosPresent, add360ToRelPosNED, add360ToVTG;
 extern double roll, rollToAOG;
 extern uint8_t dualAntNoValueCount, dualAntNoValueMax;
+extern int16_t antDistDeviation;
 
 extern bool powerUnstable;
 extern time_t powerUnstableMillis;
