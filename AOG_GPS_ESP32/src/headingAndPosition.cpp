@@ -659,7 +659,7 @@ void filterPosition(){
 }
 
 void headingAndPosition ( void* z ){
-  constexpr TickType_t xFrequency = 10;
+  constexpr TickType_t xFrequency = 1;
   TickType_t xLastWakeTime = xTaskGetTickCount();
 
   for( ;;  ){
