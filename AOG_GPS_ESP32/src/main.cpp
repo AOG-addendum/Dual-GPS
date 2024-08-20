@@ -33,7 +33,7 @@ IPAddress ipDestination( 192, 168, 1, 255 ); //IP address to send UDP data to
 ///////////////////////////////////////////////////////////////////////////
 // external Libraries
 ///////////////////////////////////////////////////////////////////////////
-ESPUIClass ESPUI( Verbosity::Quiet );
+
 DNSServer dnsServer;
 AsyncUDP udpRoof;
 SoftwareSerial NmeaTransmitter;
@@ -86,7 +86,7 @@ void setup( void ) {
   initESPUI();
 
   if( gpsConfig.enableOTA ) {
-    AsyncElegantOTA.begin( ESPUI.server );
+    AsyncElegantOTA.begin( ESPUI.WebServer() );
   }
 
   if ( udpRoof.listen( gpsConfig.aogPortSendFrom ))

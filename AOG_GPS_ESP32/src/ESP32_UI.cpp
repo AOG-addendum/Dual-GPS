@@ -15,7 +15,7 @@ uint16_t buttonReset;
 
 void setResetButtonToRed() {
   ESPUI.getControl( buttonReset )->color = ControlColor::Alizarin;
-  ESPUI.updateControlAsync( buttonReset );
+  ESPUI.updateControl( buttonReset );
 }
 
 void initESPUI ( void ) {
@@ -339,12 +339,12 @@ void initESPUI ( void ) {
   title += gpsConfig.hostname;
   ESPUI.begin( title.c_str() );
 
-  ESPUI.server->on( "/config.json", HTTP_GET, []( AsyncWebServerRequest * request ) {
+  ESPUI.WebServer()->on( "/config.json", HTTP_GET, []( AsyncWebServerRequest * request ) {
     request->send( LittleFS, "/config.json", "application/json", true );
   } );
   
   // upload a file to /upload-config
-  ESPUI.server->on( "/upload-config", HTTP_POST, []( AsyncWebServerRequest * request ) {
+  ESPUI.WebServer()->on( "/upload-config", HTTP_POST, []( AsyncWebServerRequest * request ) {
     request->send( 200 );
   }, [tabConfigurations]( AsyncWebServerRequest * request, String filename, size_t index, uint8_t* data, size_t len, bool final ) {
     if( !index ) {
