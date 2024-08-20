@@ -98,7 +98,7 @@ void initWiFi( void ){
       delay( 25 );
       WiFi.softAP( apName.c_str() );
       WiFi.begin( gpsConfig.ssid, gpsConfig.password );
-      while ( !SYSTEM_EVENT_AP_START ){ // wait until AP has started
+      while ( !WIFI_EVENT_AP_START ){ // wait until AP has started
           delay( 100);
           Serial.print(".");
       }
