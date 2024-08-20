@@ -19,8 +19,7 @@ void SpeedPWM ( void* z ){
 void initSpeedPWM() {
 
   pinMode( ( uint8_t ) gpsConfig.gpioVelocityPWM, OUTPUT );
-  ledcSetup( 0, ( uint8_t ) gpsConfig.velocityHzPerMPH, 8 );
-  ledcAttachPin( ( uint8_t ) gpsConfig.gpioVelocityPWM, 0 );
+  ledcAttach( ( uint8_t ) gpsConfig.gpioVelocityPWM, gpsConfig.velocityHzPerMPH, 8 );
   ledcWrite( 0, 128 );
   xTaskCreate( SpeedPWM, "SpeedPWM", 2048, NULL, 2, NULL );
 }
