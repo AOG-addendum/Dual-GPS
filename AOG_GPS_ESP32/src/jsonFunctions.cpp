@@ -151,7 +151,7 @@ void parseJsonToGpsConfig( json& j, GPS_Config& config ) {
       config.virtAntRight = j.value( "/gps/virtualAntennaRight"_json_pointer, gpsConfigDefaults.virtAntRight );
       config.virtAntForew = j.value( "/gps/virtualAntennaForeword"_json_pointer, gpsConfigDefaults.virtAntForew );
       config.headingAngleCorrection = j.value( "/gps/headingAngleCorrection"_json_pointer, gpsConfigDefaults.headingAngleCorrection );
-      config.AntDistDeviationFactor = j.value( "/gps/AntDistanceDeviationFactor"_json_pointer, gpsConfigDefaults.AntDistDeviationFactor );
+      config.AntDistDeviationFactor = j.value( "/gps/AntennaDistanceDeviationFactor"_json_pointer, gpsConfigDefaults.AntDistDeviationFactor );
       config.MaxHeadChangPerSec = j.value( "/gps/MaxHeadingChangePerSecond"_json_pointer, gpsConfigDefaults.MaxHeadChangPerSec );
       config.checkUBXFlags = j.value( "/gps/checkUBXFlags"_json_pointer, gpsConfigDefaults.checkUBXFlags );
       config.filterGPSposOnWeakSignal = j.value( "/gps/filterGPSpositionOnWeakSignal"_json_pointer, gpsConfigDefaults.filterGPSposOnWeakSignal );
