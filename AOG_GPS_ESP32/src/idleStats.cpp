@@ -14,7 +14,7 @@ bool core0IdleWorker( void ) {
 
   if( xLastWakeTime0 != xTaskGetTickCount() ) {
     xLastWakeTime0 = xTaskGetTickCount();
-    idleCtrCore0++;
+    idleCtrCore0 = idleCtrCore0 + 1;
   }
 
   return true;
@@ -25,7 +25,7 @@ bool core1IdleWorker( void ) {
 
   if( xLastWakeTime1 != xTaskGetTickCount() ) {
     xLastWakeTime1 = xTaskGetTickCount();
-    idleCtrCore1++;
+    idleCtrCore1 = idleCtrCore1 + 1;
   }
 
   return true;
@@ -39,8 +39,7 @@ void idleStatsWorker( void* z ) {
   str.reserve( 500 );
 
   multi_heap_info_t heapInfo;
-
-  while( 1 ) {
+  for( ;; ) {
     heap_caps_get_info( &heapInfo, MALLOC_CAP_8BIT );
 
     str = "Core0: ";
@@ -82,5 +81,5 @@ void idleStatsWorker( void* z ) {
 void initIdleStats() {
   esp_register_freertos_idle_hook_for_cpu( core0IdleWorker, 0 );
   esp_register_freertos_idle_hook_for_cpu( core1IdleWorker, 1 );
-  xTaskCreate( idleStatsWorker, "IdleStats", 2048, NULL, 1, NULL );
+  xTaskCreate( idleStatsWorker, "IdleStats", 2048, NULL, 10, NULL );
 }
