@@ -358,7 +358,7 @@ void initESPUI ( void ) {
 
       if( final ) {
         request->_tempFile.close();
-        delay(10);
+        delay( 10 );
         LittleFS.end();
         ESP.restart();
       }

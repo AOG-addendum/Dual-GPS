@@ -14,11 +14,11 @@ void WiFiStationGotIP( WiFiEvent_t event, WiFiEventInfo_t info ){
       myIP[3] = 79;
       IPAddress gwIP = WiFi.gatewayIP();
       if ( !WiFi.config( myIP, gwIP, IPAddress( 255, 255, 255, 0 ), gwIP )) {
-        Serial.println("STA Failed to configure");
+        Serial.println( "STA Failed to configure" );
       }
       ipDestination = myIP;
       ipDestination[3] = 255;
-      Serial.println("Switching off AP, station only");
+      Serial.println( "Switching off AP, station only" );
       WiFi.softAPdisconnect ( true );
       WiFi.mode( WIFI_MODE_STA );
   }
@@ -32,11 +32,11 @@ void WiFiStationDisconnected( WiFiEvent_t event, WiFiEventInfo_t info ){
   if( WiFiWasConnected == true ){
     WiFi.disconnect( true );
     if( !WiFi.config( INADDR_NONE, INADDR_NONE, INADDR_NONE ) ) {
-      Serial.println("STA Failed to unset configuration");
+      Serial.println( "STA Failed to unset configuration" );
     }
     delay( 25 );
     WiFi.begin( gpsConfig.ssid, gpsConfig.password );
-    Serial.println("reconnecting");
+    Serial.println( "reconnecting" );
   } else {
     WiFi.reconnect();
   }
@@ -99,8 +99,8 @@ void initWiFi( void ){
       WiFi.softAP( apName.c_str() );
       WiFi.begin( gpsConfig.ssid, gpsConfig.password );
       while ( !WIFI_EVENT_AP_START ){ // wait until AP has started
-          delay( 100);
-          Serial.print(".");
+          delay( 100 );
+          Serial.print( "." );
       }
       WiFi.softAPConfig( softApIP, softApIP, IPAddress( 255, 255, 255, 0 ) );
       delay( 25 );

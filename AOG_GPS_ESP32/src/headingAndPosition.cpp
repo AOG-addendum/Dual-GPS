@@ -748,8 +748,8 @@ void headingAndPosition ( void* z ){
 			}
 			gpsHzCurrentMillis = millis() - previousMillisHz;
 			previousMillisHz = millis();
-			gpsHzMaxMillis = max(gpsHzCurrentMillis, gpsHzMaxMillis);
-			gpsHzMinMillis = min(gpsHzCurrentMillis, gpsHzMinMillis);
+			gpsHzMaxMillis = max( gpsHzCurrentMillis, gpsHzMaxMillis );
+			gpsHzMinMillis = min( gpsHzCurrentMillis, gpsHzMinMillis );
 		}
 		if( digitalRead( gpsConfig.gpioDcPowerGood ) == LOW ){
 				powerUnstableMillis = millis();
