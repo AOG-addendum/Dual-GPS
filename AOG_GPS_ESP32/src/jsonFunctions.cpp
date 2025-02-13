@@ -11,15 +11,28 @@
 
 void loadSavedConfig() {
   {
-    auto j = loadJsonFromFile( "/config.json" );
-    parseJsonToGpsConfig( j, gpsConfig );
+    if( LittleFS.exists( "/gps.json" ) ) {
+      auto j = loadJsonFromFile( "/gps.json" );
+      parseJsonToGpsConfig( j, gpsConfig );
+    }
+    else if( LittleFS.exists( "/config.json" ) ){ // import from old config name
+      auto j = loadJsonFromFile( "/config.json" );
+      parseJsonToGpsConfig( j, gpsConfig );
+      saveJsonToFile( j, "/gps.json" ); // auto save file for next boot
+      LittleFS.remove( "/config.json" ); // remove config.json ->
+      //deprecated since it was a universal file with a risk of sharing wrong config to other PCBs
+    }
+    else{
+      json j;
+      parseJsonToGpsConfig( j, gpsConfig );
+    }
   }
 }
 
 void saveConfig() {
   {
     const auto j = parseGpsConfigToJson( gpsConfig );
-    saveJsonToFile( j, "/config.json" );
+    saveJsonToFile( j, "/gps.json" );
   }
 }
 

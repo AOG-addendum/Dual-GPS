@@ -12,6 +12,7 @@ uint16_t labelGpsReceivers;
 uint16_t labelPwmOut;
 uint16_t labelGpsMessageHz;
 uint16_t buttonReset;
+char downloadFilename[50];
 
 void setResetButtonToRed() {
   ESPUI.getControl( buttonReset )->color = ControlColor::Alizarin;
@@ -318,13 +319,17 @@ void initESPUI ( void ) {
     } );
   }
 
+  char gpsDownloadHTML [100];
+  sprintf( downloadFilename, "/%s.json", gpsConfig.hostname );
+  sprintf( gpsDownloadHTML, "<a href='%s'>Configuration</a>", downloadFilename );
+
   // Default Configurations Tab
   {
     uint16_t tab = ESPUI.addControl( ControlType::Tab, "Configurations", "Configurations" );
 
     ESPUI.addControl( ControlType::Label, "OTA Update:", "<a href='/update'>Update</a>", ControlColor::Carrot, tab );
 
-    ESPUI.addControl( ControlType::Label, "Download the config:", "<a href='config.json'>Configuration</a>", ControlColor::Carrot, tab );
+    ESPUI.addControl( ControlType::Label, "Download the config:", gpsDownloadHTML, ControlColor::Carrot, tab );
 
     ESPUI.addControl( ControlType::Label, "Upload the config:", "<form method='POST' action='/upload-config' enctype='multipart/form-data'><input name='f' type='file'><input type='submit'>ESP32 will restart after submitting</form>", ControlColor::Carrot, tab );
 
@@ -339,8 +344,44 @@ void initESPUI ( void ) {
   title += gpsConfig.hostname;
   ESPUI.begin( title.c_str() );
 
-  ESPUI.WebServer()->on( "/config.json", HTTP_GET, []( AsyncWebServerRequest * request ) {
-    request->send( LittleFS, "/config.json", "application/json", true );
+  ESPUI.WebServer()->on( downloadFilename, HTTP_GET, []( AsyncWebServerRequest * request ) {
+
+    Serial.print( "Preparing " );
+    Serial.print( downloadFilename );
+    Serial.println( " for download" );
+
+    char ibuffer[64];
+    File f1 = LittleFS.open( "/gps.json", "r" );    //open source file to read
+    if ( !f1 ){
+      Serial.println( "/gps.json not available for copying" );
+      return;
+    }
+
+    File f2 = LittleFS.open( downloadFilename, "w" );    //open destination file to write
+    if ( !f2 ){
+      Serial.print( downloadFilename );
+      Serial.println( " could not be created" );
+      return;
+    }
+
+    uint8_t blocks = 0;
+    Serial.print( "Copied " );
+    while ( f1.available() > 0 ){
+      byte i = f1.readBytes( ibuffer, 64 ); // i = number of bytes placed in buffer from file f1
+      f2.write(( uint8_t* )ibuffer, i );    // write i bytes from buffer to file f2
+      blocks += 1;
+      Serial.print( blocks );
+      Serial.print( " " );
+    }
+    Serial.println( "blocks" );
+
+    f2.close();
+    f1.close();
+    Serial.println( "File creation successful, downloading..." );
+    delay( 5 );
+    request->send( LittleFS, downloadFilename, "application/json", true );
+    delay( 5 );
+    LittleFS.remove( downloadFilename );
   } );
   
   // upload a file to /upload-config
@@ -348,7 +389,7 @@ void initESPUI ( void ) {
     request->send( 200 );
   }, [tabConfigurations]( AsyncWebServerRequest * request, String filename, size_t index, uint8_t* data, size_t len, bool final ) {
     if( !index ) {
-      request->_tempFile = LittleFS.open( "/config.json", "w" );
+      request->_tempFile = LittleFS.open( "/gps.json", "w" );
     }
 
     if( request->_tempFile ) {
