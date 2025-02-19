@@ -320,7 +320,7 @@ void initESPUI ( void ) {
   }
 
   char gpsDownloadHTML [100];
-  sprintf( downloadFilename, "/%s.json", gpsConfig.hostname );
+  sprintf( downloadFilename, "/%s gps.json", gpsConfig.hostname );
   sprintf( gpsDownloadHTML, "<a href='%s'>Configuration</a>", downloadFilename );
 
   // Default Configurations Tab
