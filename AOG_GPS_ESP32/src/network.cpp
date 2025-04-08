@@ -10,6 +10,21 @@ bool WiFiWasConnected = false;
 
 void WiFiStationGotIP( WiFiEvent_t event, WiFiEventInfo_t info ){
   IPAddress myIP = WiFi.localIP();
+  if( myIP == IPAddress( 0, 0, 0, 0 )) {
+    Serial.print("Collecting valid IP address ");
+    uint8_t timeout = 5;
+    while( timeout && myIP == IPAddress( 0, 0, 0, 0 )){
+      delay( 10 );
+      myIP = WiFi.localIP();
+      timeout--;
+      Serial.print(".");
+    }
+    if( timeout > 0 ){
+      Serial.println( ". done" );
+    } else {
+      Serial.println( "\nDHCP failed, GPS will probably not work" );
+    }
+  }
   if( myIP[3] != 79 ){
       myIP[3] = 79;
       IPAddress gwIP = WiFi.gatewayIP();
@@ -76,10 +91,10 @@ void initWiFi( void ){
   uint8_t timeout = 5;
   // Wait for connection, 2.5s timeout
   do {
-  delay( 500 );
-  Serial.print( "." );
-  digitalWrite( gpsConfig.gpioWifiLed, ! digitalRead( gpsConfig.gpioWifiLed ));
-  timeout--;
+    delay( 500 );
+    Serial.print( "." );
+    digitalWrite( gpsConfig.gpioWifiLed, ! digitalRead( gpsConfig.gpioWifiLed ));
+    timeout--;
   } while( timeout && WiFi.status() != WL_CONNECTED );
   // not connected -> create hotspot
   if( WiFi.status() != WL_CONNECTED ) {
@@ -87,6 +102,7 @@ void initWiFi( void ){
 
       digitalWrite( gpsConfig.gpioWifiLed, !gpsConfig.WifiLedOnLevel );
 
+      WiFi.begin(); // WiFi needs to be running to retrieve the MAC address
       apName = String( "Dual GPS " );
       apName += WiFi.macAddress();
       apName.replace( ":", "" );
