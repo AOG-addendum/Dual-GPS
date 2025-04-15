@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include "main.hpp"
 
+uint64_t NavPvtCount;
 time_t RelPosNedMillis;
 time_t NavPvtMillis;
+uint64_t RelPosNedCount;
 time_t previousRelPosNedMillis;
 time_t previousNavPvtMillis;
 
@@ -126,6 +128,7 @@ void getSerialUBX( void* z ) {
 								}
 								previousNavPvtMillis = NavPvtMillis;
 								NavPvtMillis = millis();
+								NavPvtCount ++;
 							}
 							else {
 								if (gpsConfig.debugmodeUBX) { Serial.println("UBX1 PVT checksum invalid"); }
@@ -273,6 +276,7 @@ void getSerial2UBX ( void* z ){
 								}
 								previousRelPosNedMillis = RelPosNedMillis;
 								RelPosNedMillis = millis();
+								RelPosNedCount ++;
 								UBXDigit2 = 0;
 								UBXLength2 = 100;
 							}

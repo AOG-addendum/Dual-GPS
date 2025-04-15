@@ -24,7 +24,9 @@ extern uint16_t labelGpsReceivers;
 extern uint16_t labelPwmOut;
 extern uint16_t labelGpsMessageHz;
 
+extern uint64_t RelPosNedCount;
 extern time_t RelPosNedMillis;
+extern uint64_t NavPvtCount;
 extern time_t NavPvtMillis;
 extern time_t previousRelPosNedMillis;
 extern time_t previousNavPvtMillis;

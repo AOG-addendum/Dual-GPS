@@ -81,10 +81,14 @@ void diagnosticDisplay ( void* z ){
     str += gpsHzMinMillis;
     str += "\nCurrent millis: ";
     str += gpsHzCurrentMillis;
+    str += "\nNavPVT message count: ";
+    str += NavPvtCount;
     str += "\nNavPVT bad checksum: ";
     str += diagnostics.badChecksumNavPVTCount;
     str += "\nNavPVT wrong length: ";
     str += diagnostics.wrongLengthNavPVTCount;
+    str += "\nRelPosNED message count: ";
+    str += RelPosNedCount;
     str += "\nRelPosNED bad checksum: ";
     str += diagnostics.badChecksumRelPosNEDCount;
     str += "\nRelPosNED wrong length: ";

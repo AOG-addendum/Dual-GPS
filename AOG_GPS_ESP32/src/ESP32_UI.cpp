@@ -55,6 +55,8 @@ void initESPUI ( void ) {
     labelGpsMessageHz = ESPUI.addControl( ControlType::Label, "GPS message info", "", ControlColor::Turquoise, tab );
     ESPUI.addControl( ControlType::Button, "Diagnostics:", "Reset all", ControlColor::Emerald, tab, []( Control * control, int id ) {
       if( id == B_UP ) {
+        NavPvtCount = 0;
+        RelPosNedCount = 0;
         gpsHzMaxMillis = gpsHzCurrentMillis;
         gpsHzMinMillis = gpsHzCurrentMillis;
         diagnostics.badChecksumNavPVTCount = 0;
