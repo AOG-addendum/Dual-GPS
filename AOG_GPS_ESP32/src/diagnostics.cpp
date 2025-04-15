@@ -53,6 +53,9 @@ void diagnosticDisplay ( void* z ){
       str += RelPosNedMillis - previousRelPosNedMillis;
       str += " millis apart";
     }
+    str += "\nNAV-PVT to RelPosNED difference: ";
+    str += NavPvtMillis - RelPosNedMillis;
+    str += " millis apart";
 
     Control* labelGpsReceiversHandle = ESPUI.getControl( labelGpsReceivers );
     if( power == LOW or powerUnstable == true or elapsedNavPvtMillis > 1000 or elapsedRelPosNedMillis > 1000 ){
