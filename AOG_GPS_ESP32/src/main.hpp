@@ -331,6 +331,7 @@ extern void initESPUI();
 extern void initIdleStats();
 extern void initWiFi();
 extern void initHeadingAndPosition();
+extern void initSerialUbxReceivers();
 extern void initNmeaOut();
 extern void initSpeedPWM();
 extern void initDiagnosticDisplay();

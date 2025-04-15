@@ -664,7 +664,7 @@ void headingAndPosition ( void* z ){
 
   for( ;;  ){
 		
-		getUBX();//read serials    
+		//getUBX();//read serials
 
 		if( UBXRingCount1 != OGIfromUBX )//new UBX exists
 		{

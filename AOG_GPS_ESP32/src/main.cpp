@@ -108,6 +108,7 @@ void setup( void ) {
   initIdleStats();
 
   initHeadingAndPosition();
+  initSerialUbxReceivers();
   initNmeaOut();
   initSpeedPWM();
   initDiagnosticDisplay();
