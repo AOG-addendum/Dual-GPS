@@ -142,7 +142,7 @@ constexpr uint8_t sizeOfUBXArray = 3;
 extern NAV_PVT UBXPVT1[sizeOfUBXArray];
 
 //NMEA
-extern uint8_t OGIBuffer[90], HDTBuffer[20], VTGBuffer[50], GGABuffer[80], RMCBuffer[80];
+extern uint8_t OGIBuffer[90], HDTBuffer[24], VTGBuffer[55], GGABuffer[80], RMCBuffer[80];
 extern bool newOGI, newHDT, newGGA, newVTG;
 extern uint8_t OGIdigit, GGAdigit, VTGdigit, HDTdigit, RMCdigit;
 

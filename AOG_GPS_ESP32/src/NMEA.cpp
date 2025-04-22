@@ -78,7 +78,7 @@ $PAOGI
 #include "main.hpp"
 
 //NMEA
-uint8_t OGIBuffer[90], HDTBuffer[20], VTGBuffer[50], GGABuffer[80], RMCBuffer[80];
+uint8_t OGIBuffer[90], HDTBuffer[24], VTGBuffer[55], GGABuffer[80], RMCBuffer[80];
 bool newOGI = false, newHDT = false, newGGA = false, newVTG = false, newRMC = false;
 uint8_t OGIdigit = 0, GGAdigit = 0, VTGdigit = 0, HDTdigit = 0, RMCdigit = 0;
 
@@ -634,8 +634,12 @@ void buildVTG() {
 	speed1000kmh = speed1000kmh % 10;
 	VTGBuffer[VTGdigit++] = speed1000kmh + 48;
 
+	VTGBuffer[VTGdigit++] = 0x2C;//,
+
 	VTGBuffer[VTGdigit++] = 0x4B;//K
 
+	VTGBuffer[VTGdigit++] = 0x2C;//,
+	VTGBuffer[VTGdigit++] = 0x44;//D
 
 	VTGBuffer[VTGdigit++] = 0x2A;//*
 
@@ -694,6 +698,8 @@ void buildRMC() {
 
 	//Status: A/V
 	RMCBuffer[RMCdigit++] = 0x41; //FIXME
+
+	RMCBuffer[RMCdigit++] = 0x2C;//,
 
 	//lat: xx min min . min/10 .. 4.5 digits
 	long Lat = UBXPVT1[UBXRingCount1].lat;
@@ -777,8 +783,6 @@ void buildRMC() {
 	speed1000Knotes = speed1000Knotes % 10;
 	RMCBuffer[RMCdigit++] = speed1000Knotes + 48;
 	RMCBuffer[RMCdigit++] = 0x2C;//,
-	RMCBuffer[RMCdigit++] = 0x4E;//N
-	RMCBuffer[RMCdigit++] = 0x2C;//,
 
 	//course over ground
 	double tempGPSHead;
@@ -793,6 +797,9 @@ void buildRMC() {
 	tempGPSHead = tempGPSHead - tempbyt;
 	RMCBuffer[RMCdigit++] = tempbyt + 48;
 	RMCBuffer[RMCdigit++] = 0x2E;//.
+	tempbyt = byte(tempGPSHead * 10);
+	RMCBuffer[RMCdigit++] = tempbyt + 48;
+	RMCBuffer[RMCdigit++] = 0x2C;//,
 
 	//Date
 	uint8_t date = UBXPVT1[UBXRingCount1].day;
@@ -814,7 +821,6 @@ void buildRMC() {
 
 	//Mode
 	RMCBuffer[RMCdigit++] = 0x44;//D
-	RMCBuffer[RMCdigit++] = 0x2C;//,
 
 	RMCBuffer[RMCdigit++] = 0x2A;//*
 
