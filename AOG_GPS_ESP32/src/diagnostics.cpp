@@ -98,6 +98,34 @@ void diagnosticDisplay ( void* z ){
     labelGpsMessageHzHandle->value = str;
     ESPUI.updateControl( labelGpsMessageHzHandle );
 
+    {
+      str = "";
+      if( gpsConfig.sendSerialNmeaVTG ){
+        for( uint8_t i = 0; i < 55; i++ ){
+          str += ( char ) VTGBuffer[i];
+        }
+      }
+      if( gpsConfig.sendSerialNmeaGGA ){
+        for( uint8_t i = 0; i < 80; i++ ){
+          str += ( char ) GGABuffer[i];
+        }
+      }
+      if( gpsConfig.sendSerialNmeaHDT ){
+        for( uint8_t i = 0; i < 24; i++ ){
+          str += ( char ) HDTBuffer[i];
+        }
+      }
+      if( gpsConfig.sendSerialNmeaRMC ){
+        for( uint8_t i = 0; i < 80; i++ ){
+          str += ( char ) RMCBuffer[i];
+        }
+      }
+
+      Control* labelGpsMessagesHandle = ESPUI.getControl( labelGpsMessages );
+      labelGpsMessagesHandle->value = str;
+      ESPUI.updateControl( labelGpsMessagesHandle );
+    }
+
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );
   }
 }

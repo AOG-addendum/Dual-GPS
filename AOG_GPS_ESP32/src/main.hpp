@@ -21,6 +21,7 @@ extern IPAddress ipDestination; //IP address to send UDP data to
 extern uint16_t labelLoad;
 extern uint16_t labelHeading;
 extern uint16_t labelGpsReceivers;
+extern uint16_t labelGpsMessages;
 extern uint16_t labelPwmOut;
 extern uint16_t labelGpsMessageHz;
 

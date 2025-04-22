@@ -9,6 +9,7 @@
 uint16_t labelLoad;
 uint16_t labelHeading;
 uint16_t labelGpsReceivers;
+uint16_t labelGpsMessages;
 uint16_t labelPwmOut;
 uint16_t labelGpsMessageHz;
 uint16_t buttonReset;
@@ -51,6 +52,7 @@ void initESPUI ( void ) {
     ESPUI.addControl( ControlType::Label, "Build date", buildDate, ControlColor::Turquoise, tab );
 
     labelGpsReceivers = ESPUI.addControl( ControlType::Label, "GPS receivers", "", ControlColor::Turquoise, tab );
+    labelGpsMessages = ESPUI.addControl( ControlType::Label, "RS-232 messages", "", ControlColor::Turquoise, tab );
     labelPwmOut = ESPUI.addControl( ControlType::Label, "Speed output", "", ControlColor::Turquoise, tab );
     labelGpsMessageHz = ESPUI.addControl( ControlType::Label, "GPS message info", "", ControlColor::Turquoise, tab );
     ESPUI.addControl( ControlType::Button, "Diagnostics:", "Reset all", ControlColor::Emerald, tab, []( Control * control, int id ) {
