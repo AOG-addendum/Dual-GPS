@@ -4,7 +4,7 @@ uint64_t previousMillis = 0;
 uint16_t nmeaMessageDelay;
 
 void NmeaOut ( void* z ){
-  constexpr TickType_t xFrequency = 190;
+  TickType_t xFrequency = (( uint16_t ) 1000 / gpsConfig.serialNmeaMessagesPerSec ) - 10;
   TickType_t xLastWakeTime = xTaskGetTickCount();
   uint8_t HDTReceiveBuffer[24], VTGReceiveBuffer[55], GGAReceiveBuffer[80], RMCReceiveBuffer[80];
 
@@ -30,7 +30,7 @@ void NmeaOut ( void* z ){
         NmeaTransmitter.write( RMCReceiveBuffer, 80 );
       }
     }
-    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    xTaskDelayUntil( &xLastWakeTime, xFrequency );
   }
 }
 
