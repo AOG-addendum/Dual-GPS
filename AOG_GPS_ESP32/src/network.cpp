@@ -11,8 +11,8 @@ bool WiFiWasConnected = false;
 void WiFiStationGotIP( WiFiEvent_t event, WiFiEventInfo_t info ){
   IPAddress myIP = WiFi.localIP();
   if( myIP == IPAddress( 0, 0, 0, 0 )) {
-    Serial.print("Collecting valid IP address ");
-    uint8_t timeout = 5;
+    Serial.print("\nCollecting valid IP address ");
+    uint8_t timeout = 100;
     while( timeout && myIP == IPAddress( 0, 0, 0, 0 )){
       delay( 10 );
       myIP = WiFi.localIP();
@@ -22,7 +22,9 @@ void WiFiStationGotIP( WiFiEvent_t event, WiFiEventInfo_t info ){
     if( timeout > 0 ){
       Serial.println( ". done" );
     } else {
-      Serial.println( "\nDHCP failed, GPS will probably not work" );
+      Serial.println( "\nDHCP failed, GPS will not work, restarting..." );
+      ESP.restart();
+      delay( 100 );
     }
   }
   if( myIP[3] != 79 ){
@@ -88,8 +90,8 @@ void initWiFi( void ){
   Serial.print( gpsConfig.password );
   Serial.println( "\"" );
 
-  uint8_t timeout = 5;
-  // Wait for connection, 2.5s timeout
+  uint8_t timeout = 10;
+  // Wait for connection, 5.0s timeout
   do {
     delay( 500 );
     Serial.print( "." );
