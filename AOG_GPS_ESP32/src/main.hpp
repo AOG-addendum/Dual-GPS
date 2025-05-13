@@ -32,7 +32,7 @@ extern time_t NavPvtMillis;
 extern time_t previousRelPosNedMillis;
 extern time_t previousNavPvtMillis;
 
-extern double mphPwm;
+extern uint32_t mphPwm;
 
 //Kalman filter roll
 extern double rollK, rollPc, rollG, rollXp, rollZp, rollXe;
@@ -250,7 +250,7 @@ struct GPS_Config {
   uint8_t serialNmeaMessagesPerSec = 5;
 
   uint8_t gpioVelocityPWM = 15;      // Velocity (MPH speed) PWM pin
-  int velocityHzPerMPH = 0; // PWM (MPH * multiplier)
+  int velocityHzPerMPH = 50; // PWM (MPH * multiplier)
 
   //Antennas position
   double AntDist = 140.0;                //cm distance between Antennas

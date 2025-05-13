@@ -68,7 +68,7 @@ void diagnosticDisplay ( void* z ){
 
     str = "Pwm: ";
     str += mphPwm;
-    str += "Hz\ngSpeed: ";
+    str += " Hz\ngSpeed: ";
     str += UBXPVT1[UBXRingCount1].gSpeed;
 
     Control* labelPwmOutHandle = ESPUI.getControl( labelPwmOut );
