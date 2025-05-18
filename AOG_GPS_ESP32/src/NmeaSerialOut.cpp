@@ -17,12 +17,12 @@ void NmeaOut ( void* z ){
     }
     if( gpsConfig.sendSerialNmeaVTG ){
       if( xQueueReceive( VTGQueue, &VTGReceiveBuffer, 0 ) == pdTRUE ){
-        NmeaTransmitter.write( VTGReceiveBuffer, 50 );
+        NmeaTransmitter.write( VTGReceiveBuffer, 55 );
       }
     }
     if( gpsConfig.sendSerialNmeaHDT ){
       if( xQueueReceive( HDTQueue, &HDTReceiveBuffer, 0 ) == pdTRUE ){
-        NmeaTransmitter.write( HDTReceiveBuffer, 20 );
+        NmeaTransmitter.write( HDTReceiveBuffer, 24 );
       }
     }
     if( gpsConfig.sendSerialNmeaRMC ){
