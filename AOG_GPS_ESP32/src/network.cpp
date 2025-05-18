@@ -33,8 +33,6 @@ void WiFiStationGotIP( WiFiEvent_t event, WiFiEventInfo_t info ){
       if ( !WiFi.config( myIP, gwIP, IPAddress( 255, 255, 255, 0 ), gwIP )) {
         Serial.println( "STA Failed to configure" );
       }
-      ipDestination = myIP;
-      ipDestination[3] = 255;
       Serial.println( "Switching off AP, station only" );
       WiFi.softAPdisconnect ( true );
       WiFi.mode( WIFI_MODE_STA );
