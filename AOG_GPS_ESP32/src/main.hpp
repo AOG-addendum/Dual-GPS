@@ -17,9 +17,11 @@
 
 extern AsyncUDP udpRoof;
 extern IPAddress ipDestination; //IP address to send UDP data to
+extern time_t lastHelloReceivedMillis;
 
 extern uint16_t labelLoad;
 extern uint16_t labelHeading;
+extern uint16_t labelAgOpenGpsAddress;
 extern uint16_t labelGpsReceivers;
 extern uint16_t labelGpsMessages;
 extern uint16_t labelPwmOut;

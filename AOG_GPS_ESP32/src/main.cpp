@@ -29,6 +29,7 @@ portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
 const byte DNS_PORT = 53;
 IPAddress apIP( 192, 168, 1, 1 ); //IP address for access point
 IPAddress ipDestination( 192, 168, 5, 255 ); //IP address to send UDP data to
+time_t lastHelloReceivedMillis;
 
 ///////////////////////////////////////////////////////////////////////////
 // external Libraries
@@ -101,6 +102,7 @@ void setup( void ) {
         case 32712: {
           // PGN32712, Hello from AgIO to module
           ipDestination = packet.remoteIP();
+          lastHelloReceivedMillis = millis();
         }
         break;
 

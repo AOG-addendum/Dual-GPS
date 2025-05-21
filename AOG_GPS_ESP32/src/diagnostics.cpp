@@ -124,6 +124,22 @@ void diagnosticDisplay ( void* z ){
       Control* labelGpsMessagesHandle = ESPUI.getControl( labelGpsMessages );
       labelGpsMessagesHandle->value = str;
       ESPUI.updateControl( labelGpsMessagesHandle );
+
+      Control* labelAgOpenGpsAddressHandle = ESPUI.getControl( labelAgOpenGpsAddress );
+      time_t seconds = ( millis() - lastHelloReceivedMillis ) / 1000;
+      String str;
+      str.reserve( 30 );
+      str = ipDestination.toString();
+      str += "\n";
+      str += ( String )seconds;
+      str += " seconds ago";
+      labelAgOpenGpsAddressHandle->value = str;
+      if( seconds > 5 ){
+        labelAgOpenGpsAddressHandle->color = ControlColor::Alizarin;
+      } else {
+        labelAgOpenGpsAddressHandle->color = ControlColor::Turquoise;
+      }
+      ESPUI.updateControl( labelAgOpenGpsAddressHandle );
     }
 
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );

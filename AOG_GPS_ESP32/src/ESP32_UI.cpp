@@ -8,6 +8,7 @@
 
 uint16_t labelLoad;
 uint16_t labelHeading;
+uint16_t labelAgOpenGpsAddress;
 uint16_t labelGpsReceivers;
 uint16_t labelGpsMessages;
 uint16_t labelPwmOut;
@@ -51,6 +52,7 @@ void initESPUI ( void ) {
     buildDate += String( __TIME__ );
     ESPUI.addControl( ControlType::Label, "Build date", buildDate, ControlColor::Turquoise, tab );
 
+    labelAgOpenGpsAddress = ESPUI.addControl( ControlType::Label, "AgOpenGPS Address", "N/A", ControlColor::Turquoise, tab );
     labelGpsReceivers = ESPUI.addControl( ControlType::Label, "GPS receivers", "", ControlColor::Turquoise, tab );
     labelGpsMessages = ESPUI.addControl( ControlType::Label, "RS-232 messages", "", ControlColor::Turquoise, tab );
     labelPwmOut = ESPUI.addControl( ControlType::Label, "Speed output", "", ControlColor::Turquoise, tab );
