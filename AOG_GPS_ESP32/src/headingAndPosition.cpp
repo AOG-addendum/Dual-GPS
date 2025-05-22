@@ -80,6 +80,7 @@ QueueHandle_t RMCQueue = xQueueCreate( 1, sizeof( RMCBuffer ));
 
 bool powerUnstable = false;
 time_t powerUnstableMillis = 0;
+uint8_t udpHelloCounter;
 
 // Variables ------------------------------
 
@@ -757,6 +758,11 @@ void headingAndPosition ( void* z ){
 			}
 			else if( ( millis() - powerUnstableMillis ) / 60000 > 5){
 				powerUnstable = false;
+		}
+		if( ++udpHelloCounter >= 25 ){ //2.5s
+			udpHelloCounter = 0;
+			uint8_t helloFromGPS[] = { 128, 129, 120, 120, 5, 0, 0, 0, 0, 0, 71 };
+			udpRoof.writeTo( helloFromGPS, sizeof( helloFromGPS ), ipDestination, gpsConfig.aogPortSendTo );
 		}
 		if( millis() - lastHelloReceivedMillis > 5000 ){
 			ipDestination = IPAddress( 192, 168, 5, 255 );
