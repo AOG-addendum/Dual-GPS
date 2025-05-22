@@ -101,8 +101,13 @@ void setup( void ) {
       switch( pgn ){
         case 32712: {
           // PGN32712, Hello from AgIO to module
-          ipDestination = packet.remoteIP();
-          lastHelloReceivedMillis = millis();
+          IPAddress address = packet.remoteIP();
+          if( ipDestination == address ){ // only send GPS to current AgOpenGPS
+            lastHelloReceivedMillis = millis();
+          } else if ( millis() - lastHelloReceivedMillis > 4000 ){ // AgOpenGPS Hello timed out
+            ipDestination = address; // switch to new AgOpenGPS address
+            lastHelloReceivedMillis = millis();
+          }
         }
         break;
 

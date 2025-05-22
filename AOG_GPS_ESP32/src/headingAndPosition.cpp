@@ -758,6 +758,9 @@ void headingAndPosition ( void* z ){
 			else if( ( millis() - powerUnstableMillis ) / 60000 > 5){
 				powerUnstable = false;
 		}
+		if( millis() - lastHelloReceivedMillis > 5000 ){
+			ipDestination = IPAddress( 192, 168, 5, 255 );
+		}
 
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );
 	}
