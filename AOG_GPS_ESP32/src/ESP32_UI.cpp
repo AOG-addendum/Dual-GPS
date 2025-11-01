@@ -271,7 +271,8 @@ void initESPUI ( void ) {
     {
       uint16_t num = ESPUI.addControl( ControlType::Number, "NMEA Messages per Second*", String( gpsConfig.serialNmeaMessagesPerSec ), ControlColor::Wetasphalt, tab,
       []( Control * control, int id ) {
-        gpsConfig.serialNmeaMessagesPerSec = control->value.toInt();
+        uint8_t value = control->value.toInt();
+        gpsConfig.serialNmeaMessagesPerSec = constrain( value, 1, 10 );
         setResetButtonToRed();
       } );
       ESPUI.addControl( ControlType::Min, "Min", "0", ControlColor::Peterriver, num );
